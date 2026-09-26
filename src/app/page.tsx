@@ -1,69 +1,201 @@
 import Image from "next/image";
+import Link from "next/link";
+import { ArrowIcon } from "@/components/icons";
+import { ProductCard } from "@/components/product-card";
+import {
+  categories,
+  editorialPair,
+  featuredStory,
+  hero,
+  mostWanted,
+  newArrivals,
+  services,
+} from "@/lib/catalog";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className="flex-1">
+      {/* Campaign hero */}
+      <section className="theme-inverse relative">
+        <div className="media-frame w-full aspect-campaign-tall md:aspect-campaign lg:max-h-[calc(100svh-var(--header-h))]">
+          <Image
+            src={hero.image}
+            alt="Woman in a burgundy wool coat carrying shopping bags"
+            fill
+            priority
+            sizes="100vw"
+            className="object-[70%_30%]"
+          />
+          {/* Scrims keep the copy legible over bright frames: bottom on mobile, left from md. */}
+          <div className="absolute inset-0 bg-linear-to-t from-canvas/80 via-canvas/20 to-transparent md:via-transparent" />
+          <div className="absolute inset-0 bg-linear-to-r from-canvas/60 via-canvas/10 to-transparent to-60% max-md:hidden" />
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+        <div className="absolute inset-x-0 bottom-0">
+          <div className="container-page pb-10 md:pb-14 lg:pb-20">
+            <p className="eyebrow tracking-wide-label">{hero.eyebrow}</p>
+            <h1 className="mt-4 max-w-[12ch] text-display">{hero.title}</h1>
+            <p className="mt-5 max-w-md text-body-lg text-ink-muted max-md:hidden">{hero.copy}</p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link href="/new" className="btn btn-primary">
+                Shop the collection
+              </Link>
+              <Link href="/journal/the-quiet-season" className="btn btn-secondary max-sm:hidden">
+                View the campaign
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Shop by category */}
+      <section className="section">
+        <div className="container-page">
+          <SectionHeading eyebrow="Shop by category" title="Start with the essentials" />
+          <ul className="mt-8 grid grid-cols-2 gap-x-grid gap-y-8 md:mt-10 lg:grid-cols-4">
+            {categories.map((cat) => (
+              <li key={cat.slug}>
+                <Link href={`/${cat.slug}`} className="group block">
+                  <div className="media-frame aspect-portrait">
+                    <Image
+                      src={cat.image}
+                      alt=""
+                      fill
+                      sizes="(min-width: 64rem) 25vw, 50vw"
+                      className="transition-transform duration-1000 ease-luxe group-hover:scale-[1.03]"
+                    />
+                  </div>
+                  <p className="mt-3 flex items-center justify-between px-1">
+                    <span className="eyebrow link-reveal">{cat.name}</span>
+                    <ArrowIcon className="transition-transform duration-500 ease-luxe group-hover:translate-x-1" />
+                  </p>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* New arrivals */}
+      <section className="section pt-0">
+        <div className="container-page">
+          <SectionHeading
+            eyebrow="Just landed"
+            title="New arrivals"
+            action={{ href: "/new", label: "View all" }}
+          />
+          <div className="mt-8 grid-products md:mt-10">
+            {newArrivals.map((product) => (
+              <ProductCard key={product.slug} product={product} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Editorial pair: two full-height collection panels */}
+      <section className="grid-split">
+        {editorialPair.map((c) => (
+          <Link key={c.slug} href={`/collections/${c.slug}`} className="theme-inverse group relative block">
+            <div className="media-frame aspect-portrait">
+              <Image
+                src={c.image}
+                alt=""
+                fill
+                sizes="(min-width: 48rem) 50vw, 100vw"
+                className="transition-transform duration-1000 ease-luxe group-hover:scale-[1.03]"
+              />
+              <div className="absolute inset-0 bg-linear-to-t from-canvas/60 to-transparent to-50%" />
+            </div>
+            <div className="absolute inset-x-0 bottom-0 p-gutter pb-8 md:pb-10">
+              <p className="eyebrow text-ink-muted">{c.eyebrow}</p>
+              <h2 className="mt-2 text-headline">{c.title}</h2>
+              <span className="eyebrow link-reveal mt-4 inline-block group-hover:bg-size-[100%_1px]">
+                Discover
+              </span>
+            </div>
+          </Link>
+        ))}
+      </section>
+
+      {/* Featured story */}
+      <section className="section">
+        <div className="container-page grid items-center gap-10 md:grid-cols-2 lg:gap-20">
+          <div className="media-frame aspect-product">
             <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
+              src={featuredStory.image}
+              alt="Rail of neutral-toned garments in the atelier"
+              fill
+              sizes="(min-width: 48rem) 50vw, 100vw"
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+          </div>
+          <div className="md:max-w-md lg:max-w-lg">
+            <p className="eyebrow text-ink-muted">{featuredStory.eyebrow}</p>
+            <h2 className="mt-3 text-headline">{featuredStory.title}</h2>
+            <p className="mt-5 text-body-lg text-ink-muted">{featuredStory.copy}</p>
+            <div className="mt-8 flex items-end gap-6">
+              <div className="media-frame aspect-portrait w-32 shrink-0 lg:w-40">
+                <Image src={featuredStory.detailImage} alt="" fill sizes="10rem" />
+              </div>
+              <Link href="/journal/atelier" className="eyebrow link-reveal">
+                Inside the atelier
+              </Link>
+            </div>
+          </div>
         </div>
-      </main>
+      </section>
+
+      {/* Most wanted rail */}
+      <section className="section border-t border-line">
+        <div className="container-page">
+          <SectionHeading
+            eyebrow="Most wanted"
+            title="The pieces everyone is asking for"
+            action={{ href: "/bestsellers", label: "Shop bestsellers" }}
+          />
+        </div>
+        <ul className="rail mt-8 px-gutter md:mt-10 lg:container-page">
+          {mostWanted.map((product) => (
+            <li key={product.slug}>
+              <ProductCard product={product} sizes="(min-width: 64rem) 25vw, (min-width: 48rem) 40vw, 70vw" />
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* Services */}
+      <section className="border-t border-line">
+        <ul className="container-page grid grid-cols-1 gap-y-8 py-12 sm:grid-cols-2 lg:grid-cols-4 lg:gap-x-10">
+          {services.map((s) => (
+            <li key={s.title}>
+              <h3 className="eyebrow">{s.title}</h3>
+              <p className="mt-2 text-body text-ink-muted">{s.copy}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+    </main>
+  );
+}
+
+function SectionHeading({
+  eyebrow,
+  title,
+  action,
+}: {
+  eyebrow: string;
+  title: string;
+  action?: { href: string; label: string };
+}) {
+  return (
+    <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
+      <div>
+        <p className="eyebrow text-ink-muted">{eyebrow}</p>
+        <h2 className="mt-3 text-headline">{title}</h2>
+      </div>
+      {action && (
+        <Link href={action.href} className="eyebrow link-reveal self-start sm:self-auto sm:shrink-0 sm:pb-1">
+          {action.label}
+        </Link>
+      )}
     </div>
   );
 }
