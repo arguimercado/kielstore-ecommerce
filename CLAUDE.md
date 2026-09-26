@@ -17,6 +17,7 @@ npm run db:generate  # drizzle-kit: SQL migrations from schema → ./drizzle
 npm run db:migrate   # apply migrations
 npm run db:push      # sync schema directly (no migration files)
 npm run db:studio
+npm run db:seed      # upsert the sample catalog (src/db/seed-data.ts); safe to re-run
 npm run auth:generate  # Better Auth CLI → writes src/db/auth-schema.ts
 ```
 
@@ -40,3 +41,8 @@ Stack: Next.js 16 App Router, React 19 with the React Compiler (`reactCompiler: 
 **Design system.** All tokens, component classes (`btn`, `link`, `field`) and layout primitives live in `src/app/globals.css`. For any UI work, follow the `design-system` skill (`.claude/skills/design-system/SKILL.md`).
 
 **DB driver caveat.** `drizzle-orm/neon-http` runs each query over stateless HTTP, so interactive transactions (`db.transaction`) aren't supported. Use `db.batch([...])`, or switch to the Neon WebSocket `Pool` driver if a feature needs real transactions.
+
+**Database conventions.**
+- Money is stored as integer whole cents (USD) in `*_cents` columns (`price_cents`, `compare_at_cents`). Never use floats or decimal dollars. Props and types carry cents too (`priceCents`), and only `formatPrice(cents)` converts them for display.
+- Inventory lives in the separate `stock` table (one row per product), not on `products`. A product with no stock row counts as sold out.
+- Pages and components read the catalog through `src/lib/products.ts`, which returns the storefront `Product` type. Don't query the product tables directly from UI code.

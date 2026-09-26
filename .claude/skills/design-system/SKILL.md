@@ -77,6 +77,8 @@ Otherwise use the standard Tailwind 4px scale.
   - Other links stay undecorated.
 - **Fields:** `field` on `input`, `select` and `textarea` gives an underline-only input at 16px. Use `aria-invalid="true"` for the error state and put the error message in `text-caption text-danger` below the field. Labels use `eyebrow text-ink-muted`.
 
+- **Option pickers:** a `<label>` wrapping a radio `<input>` (the class hides it). `chip` is a square text option (sizes): checked fills with ink, `disabled` is struck through. `swatch` shows a colour square from an inline `--swatch` value and gets an ink frame when checked.
+
 ## Layout primitives (Tailwind utilities; accept variants such as `md:`)
 
 - `container-page`: the default page shell (centred, max-w-page, gutter padding).
@@ -86,6 +88,7 @@ Otherwise use the standard Tailwind 4px scale.
 - `grid-split`: 1 column, 2 from md (editorial image pairs, PDP gallery and info).
 - `media-frame`: `relative overflow-hidden bg-surface`, and the direct `img`, `video` or `picture > img` fills and covers it. Combine it with an aspect class.
 - `rail`: horizontal snap carousel showing 70% / 40% / 25% width items. Put it inside a container, or pair it with `full-bleed px-gutter` so it runs edge to edge.
+- `gallery`: PDP images. A swipe rail with an 88% peek on mobile (pair it with `-mx-gutter md:mx-0`), and a vertical stack from md.
 - `full-bleed`: breaks out of a container to the full viewport width.
 - `divider`: a 1px `line` rule (use on `<hr>`).
 - `below-header`: top padding equal to the header height, for pages under a fixed header.

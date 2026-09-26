@@ -2,17 +2,27 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowIcon } from "@/components/icons";
 import { ProductCard } from "@/components/product-card";
+import { SectionHeading } from "@/components/section-heading";
 import {
   categories,
   editorialPair,
   featuredStory,
   hero,
-  mostWanted,
-  newArrivals,
+  mostWantedSlugs,
+  newArrivalSlugs,
   services,
 } from "@/lib/catalog";
+import { getProductsBySlugs } from "@/lib/products";
 
-export default function Home() {
+// Re-read prices and stock from the database at most once a minute.
+export const revalidate = 60;
+
+export default async function Home() {
+  const [newArrivals, mostWanted] = await Promise.all([
+    getProductsBySlugs(newArrivalSlugs),
+    getProductsBySlugs(mostWantedSlugs),
+  ]);
+
   return (
     <main className="flex-1">
       {/* Campaign hero */}
@@ -173,29 +183,5 @@ export default function Home() {
         </ul>
       </section>
     </main>
-  );
-}
-
-function SectionHeading({
-  eyebrow,
-  title,
-  action,
-}: {
-  eyebrow: string;
-  title: string;
-  action?: { href: string; label: string };
-}) {
-  return (
-    <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
-      <div>
-        <p className="eyebrow text-ink-muted">{eyebrow}</p>
-        <h2 className="mt-3 text-headline">{title}</h2>
-      </div>
-      {action && (
-        <Link href={action.href} className="eyebrow link-reveal self-start sm:self-auto sm:shrink-0 sm:pb-1">
-          {action.label}
-        </Link>
-      )}
-    </div>
   );
 }

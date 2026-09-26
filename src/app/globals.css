@@ -369,6 +369,101 @@
       border-bottom-color: var(--danger);
     }
   }
+
+  /* Option chip (sizes): a <label> wrapping a visually hidden radio.
+     Checked fills with ink; unavailable options are struck through. */
+  .chip {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 3rem;
+    min-height: 2.75rem;
+    padding-inline: 0.75rem;
+    border: 1px solid var(--line);
+    font-size: var(--text-body);
+    transition-property: background-color, color, border-color;
+    transition-duration: 250ms;
+    transition-timing-function: var(--ease-luxe);
+    cursor: pointer;
+    user-select: none;
+
+    & > input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    @media (hover: hover) {
+      &:hover {
+        border-color: var(--line-strong);
+      }
+    }
+
+    &:has(:checked) {
+      background-color: var(--ink);
+      border-color: var(--ink);
+      color: var(--canvas);
+    }
+
+    &:has(:focus-visible) {
+      outline: 1px solid var(--line-strong);
+      outline-offset: 3px;
+    }
+
+    &:has(:disabled) {
+      color: var(--ink-subtle);
+      border-color: var(--line);
+      background-image: linear-gradient(
+        to top right,
+        transparent calc(50% - 0.5px),
+        var(--line) calc(50% - 0.5px),
+        var(--line) calc(50% + 0.5px),
+        transparent calc(50% + 0.5px)
+      );
+      cursor: not-allowed;
+    }
+  }
+
+  /* Colour swatch: a square of the product colour (set --swatch inline)
+     inside a hairline frame that turns ink when selected. */
+  .swatch {
+    position: relative;
+    display: inline-flex;
+    padding: 3px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: border-color 250ms var(--ease-luxe);
+
+    &::before {
+      content: "";
+      width: 1.75rem;
+      height: 1.75rem;
+      background-color: var(--swatch);
+      box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 12%, transparent);
+    }
+
+    & > input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    @media (hover: hover) {
+      &:hover {
+        border-color: var(--line);
+      }
+    }
+
+    &:has(:checked) {
+      border-color: var(--line-strong);
+    }
+
+    &:has(:focus-visible) {
+      outline: 1px solid var(--line-strong);
+      outline-offset: 2px;
+    }
+  }
 }
 
 /* ==========================================================================
@@ -489,6 +584,34 @@
 
   @media (width >= 64rem) {
     grid-auto-columns: calc((100% - var(--grid-gap-x) * 3) / 4);
+  }
+}
+
+/* Product gallery: edge-to-edge swipe rail with a peek of the next image on
+   mobile, a vertical stack of large images from md. */
+@utility gallery {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 88%;
+  gap: var(--grid-gap-x);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  & > * {
+    scroll-snap-align: start;
+  }
+
+  @media (width >= 48rem) {
+    grid-auto-flow: row;
+    grid-auto-columns: auto;
+    overflow-x: visible;
+    scroll-snap-type: none;
   }
 }
 

@@ -1,16 +1,29 @@
-// Sample storefront data for the homepage. Replace with Drizzle queries
-// once product tables exist in src/db/.
+// Editorial storefront content and shared catalog types. Product data lives in
+// Postgres (src/db/) and is read through src/lib/products.ts.
+
+export type Colorway = { name: string; hex: string };
 
 export type Product = {
   slug: string;
   name: string;
+  /** Category display name, plus its slug for links. */
   category: string;
-  price: number;
-  compareAt?: number;
-  image: string;
-  hoverImage?: string;
+  categorySlug: string;
+  /** Whole cents (USD). */
+  priceCents: number;
+  compareAtCents?: number;
+  /** First image is the listing image; the rest are detail shots. */
+  gallery: string[];
   badge?: "New" | "Limited";
-  colors: number;
+  colors: Colorway[];
+  /** Empty for one-size items such as bags and accessories. */
+  sizes: string[];
+  unavailableSizes?: string[];
+  stock: number;
+  description: string;
+  details: string[];
+  composition: string;
+  care: string;
 };
 
 export type Collection = {
@@ -31,12 +44,15 @@ export function unsplash(id: string, w = 1600) {
   return `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=80`;
 }
 
-export function formatPrice(amount: number) {
+/** Formats whole cents as USD, dropping the decimals for round-dollar amounts. */
+export function formatPrice(cents: number) {
+  const digits = cents % 100 === 0 ? 0 : 2;
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
-    maximumFractionDigits: 0,
-  }).format(amount);
+    minimumFractionDigits: digits,
+    maximumFractionDigits: digits,
+  }).format(cents / 100);
 }
 
 export const hero = {
@@ -46,6 +62,8 @@ export const hero = {
   image: unsplash("1483985988355-763728e1935b", 2400),
 };
 
+// Homepage "Shop by category" tiles. These are editorial departments, not the
+// product categories stored in the database.
 export const categories: Category[] = [
   { slug: "women", name: "Women", image: unsplash("1515886657613-9f3515b0c78f", 1000) },
   { slug: "men", name: "Men", image: unsplash("1617137968427-85924c800a22", 1000) },
@@ -53,129 +71,36 @@ export const categories: Category[] = [
   { slug: "shoes", name: "Shoes", image: unsplash("1535043934128-cf0b28d52f95", 1000) },
 ];
 
-export const newArrivals: Product[] = [
-  {
-    slug: "wool-overcoat",
-    name: "Checked wool overcoat",
-    category: "Outerwear",
-    price: 890,
-    image: unsplash("1485968579580-b6d095142e6e", 1000),
-    badge: "New",
-    colors: 2,
-  },
-  {
-    slug: "chiffon-gown",
-    name: "Pleated chiffon gown",
-    category: "Dresses",
-    price: 540,
-    image: unsplash("1595777457583-95e059d581b8", 1000),
-    badge: "New",
-    colors: 3,
-  },
-  {
-    slug: "cashmere-crew",
-    name: "Cashmere crewneck sweater",
-    category: "Knitwear",
-    price: 420,
-    image: unsplash("1434389677669-e08b4cac3105", 1000),
-    colors: 4,
-  },
-  {
-    slug: "woven-top-handle",
-    name: "Woven leather top-handle bag",
-    category: "Bags",
-    price: 1150,
-    image: unsplash("1590874103328-eac38a683ce7", 1000),
-    badge: "Limited",
-    colors: 2,
-  },
-  {
-    slug: "biker-jacket",
-    name: "Lambskin biker jacket",
-    category: "Outerwear",
-    price: 1290,
-    image: unsplash("1551028719-00167b16eac5", 1000),
-    colors: 2,
-  },
-  {
-    slug: "heavy-tee",
-    name: "Heavyweight cotton T-shirt",
-    category: "Essentials",
-    price: 95,
-    image: unsplash("1521572163474-6864f9cf17ab", 1000),
-    colors: 5,
-  },
-  {
-    slug: "leather-pump",
-    name: "Pointed leather pump",
-    category: "Shoes",
-    price: 640,
-    compareAt: 780,
-    image: unsplash("1543163521-1bf539c55dd2", 1000),
-    colors: 2,
-  },
-  {
-    slug: "acetate-sunglasses",
-    name: "Oversized acetate sunglasses",
-    category: "Accessories",
-    price: 310,
-    image: unsplash("1511499767150-a48a237f0083", 1000),
-    colors: 3,
-  },
+// Curated homepage merchandising, resolved against the database by slug.
+export const newArrivalSlugs = [
+  "wool-overcoat",
+  "chiffon-gown",
+  "cashmere-crew",
+  "woven-top-handle",
+  "biker-jacket",
+  "heavy-tee",
+  "leather-pump",
+  "acetate-sunglasses",
 ];
 
-export const mostWanted: Product[] = [
-  {
-    slug: "leather-sneaker",
-    name: "Low-top leather sneaker",
-    category: "Shoes",
-    price: 450,
-    image: unsplash("1549298916-b41d501d3772", 1000),
-    colors: 3,
-  },
-  {
-    slug: "silk-trouser",
-    name: "Tapered silk trouser",
-    category: "Trousers",
-    price: 480,
-    image: unsplash("1594633312681-425c7b97ccd1", 1000),
-    colors: 2,
-  },
-  {
-    slug: "steel-watch",
-    name: "Steel automatic watch",
-    category: "Accessories",
-    price: 2400,
-    image: unsplash("1523170335258-f5ed11844a49", 1000),
-    colors: 1,
-  },
-  {
-    slug: "loopback-sweatshirt",
-    name: "Loopback cotton sweatshirt",
-    category: "Essentials",
-    price: 360,
-    compareAt: 450,
-    image: unsplash("1620799140408-edc6dcb6d633", 1000),
-    colors: 3,
-  },
-  {
-    slug: "runner",
-    name: "Suede panel runner",
-    category: "Shoes",
-    price: 390,
-    image: unsplash("1560769629-975ec94e6a86", 1000),
-    colors: 2,
-  },
-  {
-    slug: "denim-shirt-dress",
-    name: "Washed denim shirt dress",
-    category: "Dresses",
-    price: 390,
-    image: unsplash("1591369822096-ffd140ec948f", 1000),
-    badge: "Limited",
-    colors: 2,
-  },
+export const mostWantedSlugs = [
+  "leather-sneaker",
+  "silk-trouser",
+  "steel-watch",
+  "loopback-sweatshirt",
+  "runner",
+  "denim-shirt-dress",
 ];
+
+export type StockState = "in-stock" | "low-stock" | "sold-out";
+
+export const LOW_STOCK_THRESHOLD = 5;
+
+export function getStockState(stock: number): StockState {
+  if (stock <= 0) return "sold-out";
+  if (stock <= LOW_STOCK_THRESHOLD) return "low-stock";
+  return "in-stock";
+}
 
 export const editorialPair: Collection[] = [
   {

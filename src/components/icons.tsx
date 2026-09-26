@@ -68,6 +68,22 @@ export function CloseIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
+export function PlusIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <Icon width={16} height={16} {...props}>
+      <path d="M12 4v16M4 12h16" />
+    </Icon>
+  );
+}
+
+export function CheckIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <Icon width={16} height={16} {...props}>
+      <path d="m4.5 12.5 5 5 10-11" />
+    </Icon>
+  );
+}
+
 export function ArrowIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <Icon width={16} height={16} {...props}>

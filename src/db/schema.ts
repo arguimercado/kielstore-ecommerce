@@ -4,6 +4,7 @@
 // `src/db/auth-schema.ts`, then re-export them here:
 //   export * from "./auth-schema";
 //
-// Add application tables (products, orders, ...) in their own files and
-// re-export them from here as well.
-export {};
+// Application tables live in their own files and are re-exported here.
+export * from "./categories";
+export * from "./products";
+export * from "./stock";
