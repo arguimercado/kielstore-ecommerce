@@ -465,6 +465,11 @@
     }
   }
 
+  /* Swatch for a mixed colourway (the "Multi" filter): quarters of product colours. */
+  .swatch-multi::before {
+    background: conic-gradient(#b3202a 0 25%, #2f6fb0 0 50%, #d9ccb4 0 75%, #5b5a3c 0);
+  }
+
   /* Navigation progress: an ink hairline that draws along the bottom edge of
      the sticky header while a route loads, then completes and fades. Sits in
      a positioned parent; data-state="complete" finishes it. */

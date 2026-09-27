@@ -1,7 +1,21 @@
 // Editorial storefront content and shared catalog types. Product data lives in
 // Postgres (src/db/) and is read through src/lib/products.ts.
 
-export type Colorway = { name: string; hex: string };
+export type ColorFamily =
+  | "black"
+  | "white"
+  | "grey"
+  | "beige"
+  | "brown"
+  | "blue"
+  | "red"
+  | "orange"
+  | "pink"
+  | "green"
+  | "multi";
+
+/** A product colour. `name` is shown on the PDP; `family` groups it for filtering. */
+export type Colorway = { name: string; hex: string; family: ColorFamily };
 
 export type Product = {
   slug: string;

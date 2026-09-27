@@ -48,5 +48,6 @@ Stack: Next.js 16 App Router, React 19 with the React Compiler (`reactCompiler: 
 
 **Database conventions.**
 - Money is Philippine pesos (PHP), stored as integer centavos (the minor unit, 1/100 peso) in `*_cents` columns (`price_cents`, `compare_at_cents`); the `cents` names mean minor units. Never use floats or decimal pesos. Props and types carry centavos too (`priceCents`), and only `formatPrice(cents)` converts them for display.
+- Each product colour (`colors` jsonb) has a display `name`, a `hex` and a `family` (`ColorFamily` in `src/lib/catalog.ts`). Shop filters match on `family`, so give every new colour one. The filter URL contract (`size`, `color`, `price`, `stock`, `sort`, `view`) lives in `src/lib/filters.ts`.
 - Inventory lives in the separate `stock` table (one row per product), not on `products`. A product with no stock row counts as sold out.
 - Pages and components read the catalog through `src/lib/products.ts`, which returns the storefront `Product` type. Don't query the product tables directly from UI code.
