@@ -1,15 +1,18 @@
 "use client";
 
 import { useEffect, useState, type CSSProperties, type FormEvent } from "react";
+import { useCart } from "@/components/cart-provider";
 import { CheckIcon } from "@/components/icons";
 import { WishlistButton } from "@/components/wishlist-button";
 import { getStockState, type Product } from "@/lib/catalog";
 
-type Status = "idle" | "size-required" | "added" | "notify";
+type Status =
+  | { kind: "idle" | "size-required" | "adding" | "added" | "notify" }
+  | { kind: "error"; message: string };
 
 /**
- * Colour and size selection with add-to-bag. There is no cart yet, so adding
- * only confirms in place; wire `onAdd` to a server action once orders exist.
+ * Colour and size selection with add-to-bag. The server checks the options
+ * and the stock; this only confirms or explains what it decided.
  */
 export function PurchasePanel({ product }: { product: Product }) {
   const soldOut = getStockState(product.stock) === "sold-out";
@@ -18,29 +21,51 @@ export function PurchasePanel({ product }: { product: Product }) {
 
   const [color, setColor] = useState(product.colors[0].name);
   const [size, setSize] = useState<string | null>(null);
-  const [status, setStatus] = useState<Status>("idle");
+  const [status, setStatus] = useState<Status>({ kind: "idle" });
+  const cart = useCart();
 
   // Let the "Added" confirmation settle back to the normal button.
   useEffect(() => {
-    if (status !== "added") return;
-    const t = setTimeout(() => setStatus("idle"), 2500);
+    if (status.kind !== "added") return;
+    const t = setTimeout(() => setStatus({ kind: "idle" }), 2500);
     return () => clearTimeout(t);
   }, [status]);
 
-  function onAdd(e: FormEvent) {
+  async function onAdd(e: FormEvent) {
     e.preventDefault();
+    if (status.kind === "adding") return;
     if (soldOut) {
-      setStatus("notify");
+      setStatus({ kind: "notify" });
       return;
     }
     if (hasSizes && !size) {
-      setStatus("size-required");
+      setStatus({ kind: "size-required" });
       return;
     }
-    setStatus("added");
+    setStatus({ kind: "adding" });
+    try {
+      const result = await cart.add(product.slug, color, size ?? "");
+      if (!result || result.ok) {
+        setStatus(result ? { kind: "added" } : { kind: "idle" });
+      } else if (result.reason === "insufficient-stock") {
+        setStatus({
+          kind: "error",
+          message:
+            result.available > 0
+              ? `Only ${result.available} available, and they're already in your bag.`
+              : "Every piece we have is already in your bag.",
+        });
+      } else if (result.reason === "signed-out") {
+        setStatus({ kind: "idle" });
+      } else {
+        setStatus({ kind: "error", message: "This option is no longer available." });
+      }
+    } catch {
+      setStatus({ kind: "error", message: "We couldn't add this to your bag. Please try again." });
+    }
   }
 
-  const sizeError = status === "size-required";
+  const sizeError = status.kind === "size-required";
 
   return (
     <form onSubmit={onAdd} className="space-y-7" noValidate>
@@ -61,7 +86,10 @@ export function PurchasePanel({ product }: { product: Product }) {
                 name="color"
                 value={c.name}
                 checked={color === c.name}
-                onChange={() => setColor(c.name)}
+                onChange={() => {
+                  setColor(c.name);
+                  setStatus({ kind: "idle" });
+                }}
               />
               <span className="sr-only">{c.name}</span>
             </label>
@@ -91,7 +119,7 @@ export function PurchasePanel({ product }: { product: Product }) {
                     checked={size === s}
                     onChange={() => {
                       setSize(s);
-                      setStatus("idle");
+                      setStatus({ kind: "idle" });
                     }}
                   />
                   {s}
@@ -110,12 +138,12 @@ export function PurchasePanel({ product }: { product: Product }) {
 
       <div className="flex gap-2">
         {soldOut ? (
-          <button type="submit" className="btn btn-secondary btn-lg flex-1" disabled={status === "notify"}>
-            {status === "notify" ? "We'll let you know" : "Notify me when available"}
+          <button type="submit" className="btn btn-secondary btn-lg flex-1" disabled={status.kind === "notify"}>
+            {status.kind === "notify" ? "We'll let you know" : "Notify me when available"}
           </button>
         ) : (
-          <button type="submit" className="btn btn-primary btn-lg flex-1">
-            {status === "added" ? (
+          <button type="submit" className="btn btn-primary btn-lg flex-1" aria-disabled={status.kind === "adding"}>
+            {status.kind === "added" ? (
               <>
                 <CheckIcon /> Added to bag
               </>
@@ -131,9 +159,12 @@ export function PurchasePanel({ product }: { product: Product }) {
         />
       </div>
 
+      {status.kind === "error" && <p className="-mt-4 text-caption text-danger">{status.message}</p>}
+
       <p role="status" aria-live="polite" className="sr-only">
-        {status === "added" && `${product.name}${size ? `, size ${size}` : ""}, added to your bag.`}
-        {status === "notify" && `We'll email you when ${product.name} is back in stock.`}
+        {status.kind === "added" && `${product.name}${size ? `, size ${size}` : ""}, added to your bag.`}
+        {status.kind === "notify" && `We'll email you when ${product.name} is back in stock.`}
+        {status.kind === "error" && status.message}
       </p>
     </form>
   );

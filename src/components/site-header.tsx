@@ -1,8 +1,10 @@
 import Link from "next/link";
-import { BagIcon, UserIcon } from "@/components/icons";
+import { BagHeaderLink } from "@/components/cart-provider";
+import { UserIcon } from "@/components/icons";
 import { MobileNav } from "@/components/mobile-nav";
 import { NavigationProgress } from "@/components/navigation-progress";
 import { SearchDialog } from "@/components/search-dialog";
+import { WishlistHeaderLink } from "@/components/wishlist-button";
 
 const nav = [
   { href: "/new", label: "New in" },
@@ -47,9 +49,8 @@ export function SiteHeader() {
             <Link href="/account" aria-label="Account" className="btn btn-ghost btn-icon hidden sm:inline-flex">
               <UserIcon />
             </Link>
-            <Link href="/bag" aria-label="Bag, 0 items" className="btn btn-ghost btn-icon">
-              <BagIcon />
-            </Link>
+            <WishlistHeaderLink className="btn btn-ghost btn-icon hidden sm:inline-flex" />
+            <BagHeaderLink className="btn btn-ghost btn-icon" />
           </div>
         </div>
         <NavigationProgress />

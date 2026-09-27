@@ -6,6 +6,8 @@ import { saveToWishlist, unsaveFromWishlist } from "@/app/account/wishlist/actio
 import type { WishlistState } from "@/app/api/wishlist/route";
 
 type Wishlist = {
+  /** How many pieces are saved (0 while loading or signed out). */
+  count: number;
   isSaved: (slug: string) => boolean;
   save: (slug: string, name: string) => void;
   remove: (slug: string, name: string) => void;
@@ -102,6 +104,7 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
   }
 
   const value: Wishlist = {
+    count: saved.size,
     isSaved: (slug) => saved.has(slug),
     save: (slug, name) => update(slug, name, true),
     remove: (slug, name) => update(slug, name, false),

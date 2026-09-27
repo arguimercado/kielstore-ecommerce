@@ -22,6 +22,27 @@
       "when": 1790506759845,
       "tag": "0002_solid_mindworm",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1790509832888,
+      "tag": "0003_loose_groot",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1790513016414,
+      "tag": "0004_busy_wallop",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1790513017986,
+      "tag": "0005_reserve_order_stock",
+      "breakpoints": true
     }
   ]
 }
