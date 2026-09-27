@@ -91,3 +91,27 @@ export function ArrowIcon(props: SVGProps<SVGSVGElement>) {
     </Icon>
   );
 }
+
+export function GridIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <Icon {...props}>
+      <path d="M4.5 4.5h6v6h-6zM13.5 4.5h6v6h-6zM4.5 13.5h6v6h-6zM13.5 13.5h6v6h-6z" />
+    </Icon>
+  );
+}
+
+export function ListIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <Icon {...props}>
+      <path d="M4.5 5.5h4v4h-4zM4.5 14.5h4v4h-4zM11.5 7.5h8M11.5 16.5h8" />
+    </Icon>
+  );
+}
+
+export function FilterIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <Icon width={16} height={16} {...props}>
+      <path d="M4 7h10M18 7h2M4 17h2M10 17h10M14 5v4M6 15v4" />
+    </Icon>
+  );
+}

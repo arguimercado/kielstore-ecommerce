@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
 import { ProductCard } from "@/components/product-card";
+import { ProductGridSkeleton } from "@/components/product-grid-skeleton";
 import { SearchForm } from "@/components/search-form";
 import { SearchSuggestions } from "@/components/search-suggestions";
 import { searchProducts } from "@/lib/products";
@@ -55,7 +56,7 @@ export default async function SearchPage(props: PageProps<"/search">) {
       <section aria-label="Search results" className="section pt-8 md:pt-10">
         <div className="container-page">
           {q ? (
-            <Suspense key={q} fallback={<ResultsSkeleton />}>
+            <Suspense key={q} fallback={<ProductGridSkeleton />}>
               <SearchResults q={q} />
             </Suspense>
           ) : (
@@ -96,26 +97,5 @@ async function SearchResults({ q }: { q: string }) {
         ))}
       </div>
     </>
-  );
-}
-
-/** Placeholder grid in the product card's shape while results load. */
-function ResultsSkeleton() {
-  return (
-    <div aria-busy="true" aria-label="Loading results">
-      <div className="mb-8 h-4.5 w-16 bg-surface md:mb-10" />
-      <div className="grid-products motion-safe:animate-pulse">
-        {Array.from({ length: 8 }, (_, i) => (
-          <div key={i}>
-            <div className="aspect-product bg-surface" />
-            <div className="mt-3 space-y-2 px-1">
-              <div className="h-3 w-1/4 bg-surface" />
-              <div className="h-3.5 w-2/3 bg-surface" />
-              <div className="h-3.5 w-1/3 bg-surface" />
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
   );
 }

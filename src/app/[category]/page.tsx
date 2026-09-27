@@ -1,35 +1,32 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ProductListing } from "@/components/product-listing";
-import { getCategories, getCategory, getProducts } from "@/lib/products";
+import { parseFilters } from "@/lib/filters";
+import { getCategories, getCategory, getFilterFacets } from "@/lib/products";
 
-// Prerender every category at build, re-read prices and stock at most once a
-// minute, and render categories added later on first request. Unknown slugs 404.
-export const revalidate = 60;
-export const dynamicParams = true;
-
-export async function generateStaticParams() {
-  const categories = await getCategories();
-  return categories.map((c) => ({ category: c.slug }));
-}
+// Rendered per request: filters, sort and view come from the search params.
+// Unknown category slugs 404.
 
 export async function generateMetadata(props: PageProps<"/[category]">): Promise<Metadata> {
-  const { category: slug } = await props.params;
+  const [{ category: slug }, searchParams] = await Promise.all([props.params, props.searchParams]);
   const category = await getCategory(slug);
   if (!category) return {};
 
   return {
     title: `${category.name} | Kiel Store`,
     description: `Shop ${category.name.toLowerCase()} at Kiel Store, made in small runs and built to last.`,
+    // Filtered and sorted variations are near-duplicates of the plain page.
+    ...(Object.keys(searchParams).length > 0 && { robots: { index: false, follow: true } }),
   };
 }
 
 export default async function CategoryPage(props: PageProps<"/[category]">) {
-  const { category: slug } = await props.params;
+  const [{ category: slug }, searchParams] = await Promise.all([props.params, props.searchParams]);
   const category = await getCategory(slug);
   if (!category) notFound();
 
-  const [products, categories] = await Promise.all([getProducts(category.slug), getCategories()]);
+  const filters = parseFilters(searchParams);
+  const [facets, categories] = await Promise.all([getFilterFacets(category.slug), getCategories()]);
 
-  return <ProductListing products={products} categories={categories} category={category} />;
+  return <ProductListing categories={categories} category={category} facets={facets} filters={filters} />;
 }
