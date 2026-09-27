@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { HeartIcon } from "@/components/icons";
 import { useWishlist } from "@/components/wishlist-provider";
 
@@ -43,5 +44,19 @@ export function WishlistRemoveButton({ slug, name }: { slug: string; name: strin
     >
       Remove
     </button>
+  );
+}
+
+/** Header link to the wishlist; the heart fills once anything is saved. */
+export function WishlistHeaderLink({ className }: { className: string }) {
+  const { count } = useWishlist();
+  return (
+    <Link
+      href="/account/wishlist"
+      aria-label={count > 0 ? `Wishlist, ${count} ${count === 1 ? "item" : "items"}` : "Wishlist"}
+      className={className}
+    >
+      <HeartIcon fill={count > 0 ? "currentColor" : "none"} />
+    </Link>
   );
 }
