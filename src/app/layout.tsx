@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
+import { CartProvider } from "@/components/cart-provider";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { WishlistProvider } from "@/components/wishlist-provider";
@@ -21,9 +22,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="en" className={`${sans.variable} h-full`}>
       <body className="flex min-h-full flex-col">
         <WishlistProvider>
-          <SiteHeader />
-          {children}
-          <SiteFooter />
+          <CartProvider>
+            <SiteHeader />
+            {children}
+            <SiteFooter />
+          </CartProvider>
         </WishlistProvider>
       </body>
     </html>

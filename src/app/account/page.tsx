@@ -29,8 +29,16 @@ export default async function AccountPage() {
       </dl>
 
       <Link
-        href="/account/wishlist"
+        href="/account/orders"
         className="group mt-10 flex max-w-reading items-center justify-between border-b border-line py-4"
+      >
+        <span className="eyebrow link-reveal group-hover:bg-size-[100%_1px]">Orders</span>
+        <ArrowIcon className="transition-transform duration-500 ease-luxe group-hover:translate-x-1" />
+      </Link>
+
+      <Link
+        href="/account/wishlist"
+        className="group flex max-w-reading items-center justify-between border-b border-line py-4"
       >
         <span className="eyebrow link-reveal group-hover:bg-size-[100%_1px]">Wishlist</span>
         <ArrowIcon className="transition-transform duration-500 ease-luxe group-hover:translate-x-1" />
