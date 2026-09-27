@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState, type CSSProperties, type FormEvent } from "react";
-import { CheckIcon, HeartIcon } from "@/components/icons";
+import { CheckIcon } from "@/components/icons";
+import { WishlistButton } from "@/components/wishlist-button";
 import { getStockState, type Product } from "@/lib/catalog";
 
 type Status = "idle" | "size-required" | "added" | "notify";
@@ -18,7 +19,6 @@ export function PurchasePanel({ product }: { product: Product }) {
   const [color, setColor] = useState(product.colors[0].name);
   const [size, setSize] = useState<string | null>(null);
   const [status, setStatus] = useState<Status>("idle");
-  const [saved, setSaved] = useState(false);
 
   // Let the "Added" confirmation settle back to the normal button.
   useEffect(() => {
@@ -124,15 +124,11 @@ export function PurchasePanel({ product }: { product: Product }) {
             )}
           </button>
         )}
-        <button
-          type="button"
-          aria-pressed={saved}
-          aria-label={saved ? "Remove from wishlist" : "Save to wishlist"}
-          onClick={() => setSaved((v) => !v)}
+        <WishlistButton
+          slug={product.slug}
+          name={product.name}
           className="btn btn-secondary btn-lg btn-icon size-14"
-        >
-          <HeartIcon fill={saved ? "currentColor" : "none"} />
-        </button>
+        />
       </div>
 
       <p role="status" aria-live="polite" className="sr-only">

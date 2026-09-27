@@ -27,7 +27,7 @@ export async function generateMetadata(props: PageProps<"/products/[slug]">): Pr
   if (!product) return {};
 
   return {
-    title: `${product.name} | Maison`,
+    title: `${product.name} | Kiel Store`,
     description: product.description,
     openGraph: { images: [product.gallery[0]] },
   };
@@ -49,11 +49,11 @@ export default async function ProductPage(props: PageProps<"/products/[slug]">) 
     description: product.description,
     image: product.gallery,
     category: product.category,
-    brand: { "@type": "Brand", name: "Maison" },
+    brand: { "@type": "Brand", name: "Kiel Store" },
     offers: {
       "@type": "Offer",
       price: (product.priceCents / 100).toFixed(2),
-      priceCurrency: "USD",
+      priceCurrency: "PHP",
       availability:
         getStockState(product.stock) === "sold-out" ? "https://schema.org/OutOfStock" : "https://schema.org/InStock",
     },

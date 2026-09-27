@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import { HeartIcon } from "@/components/icons";
 import { Price } from "@/components/price";
+import { WishlistButton } from "@/components/wishlist-button";
 import { getStockState, type Product } from "@/lib/catalog";
 
 const gridSizes = "(min-width: 80rem) 25vw, (min-width: 48rem) 33vw, 50vw";
@@ -46,13 +46,12 @@ export function ProductCard({
           </p>
         </div>
       </Link>
-      <button
-        type="button"
-        aria-label={`Save ${product.name}`}
+      <WishlistButton
+        slug={product.slug}
+        name={product.name}
+        iconSize={18}
         className="btn btn-ghost btn-icon absolute top-1 right-1 hover:bg-transparent"
-      >
-        <HeartIcon width={18} height={18} />
-      </button>
+      />
     </article>
   );
 }

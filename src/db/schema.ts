@@ -1,10 +1,12 @@
 // Drizzle schema entry point.
 //
-// Better Auth tables: run `npm run auth:generate` to generate them into
-// `src/db/auth-schema.ts`, then re-export them here:
-//   export * from "./auth-schema";
+// Better Auth tables are generated into `src/db/auth-schema.ts` by
+// `npm run auth:generate`. Regenerate it whenever Better Auth plugins or
+// options change; don't edit it by hand.
 //
 // Application tables live in their own files and are re-exported here.
+export * from "./auth-schema";
 export * from "./categories";
 export * from "./products";
 export * from "./stock";
+export * from "./wishlist";

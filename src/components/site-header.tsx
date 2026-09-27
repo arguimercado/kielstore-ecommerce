@@ -1,6 +1,8 @@
 import Link from "next/link";
-import { BagIcon, SearchIcon, UserIcon } from "@/components/icons";
+import { BagIcon, UserIcon } from "@/components/icons";
 import { MobileNav } from "@/components/mobile-nav";
+import { NavigationProgress } from "@/components/navigation-progress";
+import { SearchDialog } from "@/components/search-dialog";
 
 const nav = [
   { href: "/new", label: "New in" },
@@ -16,7 +18,7 @@ export function SiteHeader() {
     <>
       <div className="theme-inverse">
         <p className="container-page py-2 text-center text-caption">
-          Complimentary shipping and returns on orders over $250
+          Complimentary shipping and returns on orders over ₱15,000
         </p>
       </div>
       <header className="sticky top-0 z-40 h-header border-b border-line bg-canvas">
@@ -37,14 +39,12 @@ export function SiteHeader() {
           </div>
 
           <Link href="/" className="text-title tracking-wide-label uppercase">
-            Maison
+            Kiel Store
           </Link>
 
           <div className="-mr-3 flex items-center justify-end">
-            <button type="button" aria-label="Search" className="btn btn-ghost btn-icon">
-              <SearchIcon />
-            </button>
-            <Link href="/sign-in" aria-label="Account" className="btn btn-ghost btn-icon hidden sm:inline-flex">
+            <SearchDialog />
+            <Link href="/account" aria-label="Account" className="btn btn-ghost btn-icon hidden sm:inline-flex">
               <UserIcon />
             </Link>
             <Link href="/bag" aria-label="Bag, 0 items" className="btn btn-ghost btn-icon">
@@ -52,6 +52,7 @@ export function SiteHeader() {
             </Link>
           </div>
         </div>
+        <NavigationProgress />
       </header>
     </>
   );

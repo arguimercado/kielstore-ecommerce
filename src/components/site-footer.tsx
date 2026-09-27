@@ -3,7 +3,7 @@ import Link from "next/link";
 const columns = [
   { title: "Shop", links: ["New in", "Women", "Men", "Bags", "Shoes", "Gift cards"] },
   { title: "Client services", links: ["Contact us", "Shipping", "Returns", "Size guide", "Repairs"] },
-  { title: "Maison", links: ["Our story", "Atelier", "Sustainability", "Journal", "Careers"] },
+  { title: "Kiel Store", links: ["Our story", "Atelier", "Sustainability", "Journal", "Careers"] },
 ];
 
 export function SiteFooter() {
@@ -56,7 +56,7 @@ export function SiteFooter() {
 
         <hr className="divider mt-16" />
         <div className="mt-6 flex flex-col gap-4 text-caption text-ink-muted sm:flex-row sm:items-center sm:justify-between">
-          <p>© 2026 Maison. All rights reserved.</p>
+          <p>© 2026 Kiel Store. All rights reserved.</p>
           <ul className="flex flex-wrap gap-x-6 gap-y-2">
             {["Privacy", "Terms", "Cookies", "Accessibility"].map((label) => (
               <li key={label}>

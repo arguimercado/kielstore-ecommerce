@@ -464,6 +464,34 @@
       outline-offset: 2px;
     }
   }
+
+  /* Navigation progress: an ink hairline that draws along the bottom edge of
+     the sticky header while a route loads, then completes and fades. Sits in
+     a positioned parent; data-state="complete" finishes it. */
+  .nav-progress {
+    position: absolute;
+    inset-inline: 0;
+    bottom: -1px;
+    height: 2px;
+    background-color: var(--ink);
+    transform-origin: left;
+    pointer-events: none;
+    scale: 0.9 1;
+    /* Quick start, then a long crawl, so a slow load never looks finished. */
+    transition: scale 10s cubic-bezier(0.1, 0.8, 0.2, 1);
+
+    @starting-style {
+      scale: 0 1;
+    }
+
+    &[data-state="complete"] {
+      scale: 1 1;
+      opacity: 0;
+      transition:
+        scale 300ms var(--ease-luxe),
+        opacity 400ms var(--ease-luxe) 300ms;
+    }
+  }
 }
 
 /* ==========================================================================

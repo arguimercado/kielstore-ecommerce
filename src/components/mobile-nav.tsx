@@ -65,9 +65,14 @@ export function MobileNav({ items }: { items: NavItem[] }) {
           </ul>
           <hr className="divider my-8" />
           <ul className="space-y-4">
-            {["Account", "Wishlist", "Stores", "Client services"].map((label) => (
+            {[
+              { label: "Account", href: "/account" },
+              { label: "Wishlist", href: "/account/wishlist" },
+              { label: "Stores", href: "#" },
+              { label: "Client services", href: "#" },
+            ].map(({ label, href }) => (
               <li key={label}>
-                <Link href="#" onClick={() => setOpen(false)} className="eyebrow link-reveal">
+                <Link href={href} onClick={() => setOpen(false)} className="eyebrow link-reveal">
                   {label}
                 </Link>
               </li>

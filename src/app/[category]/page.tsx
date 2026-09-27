@@ -19,8 +19,8 @@ export async function generateMetadata(props: PageProps<"/[category]">): Promise
   if (!category) return {};
 
   return {
-    title: `${category.name} | Maison`,
-    description: `Shop ${category.name.toLowerCase()} at Maison, made in small runs and built to last.`,
+    title: `${category.name} | Kiel Store`,
+    description: `Shop ${category.name.toLowerCase()} at Kiel Store, made in small runs and built to last.`,
   };
 }
 

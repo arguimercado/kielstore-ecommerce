@@ -1,6 +1,6 @@
 import { formatPrice } from "@/lib/catalog";
 
-/** Current price, with the original struck through when the item is reduced. Amounts are cents. */
+/** Current price, with the original struck through when the item is reduced. Amounts are centavos. */
 export function Price({
   priceCents,
   compareAtCents,

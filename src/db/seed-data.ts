@@ -1,4 +1,4 @@
-// Sample catalog loaded by `npm run db:seed`. Prices are whole cents.
+// Sample catalog loaded by `npm run db:seed`. Prices are whole centavos (PHP).
 
 import type { Colorway } from "../lib/catalog";
 import { unsplash } from "../lib/catalog";
@@ -65,7 +65,7 @@ export const seedProducts: SeedProduct[] = [
     slug: "wool-overcoat",
     name: "Checked wool overcoat",
     categorySlug: "outerwear",
-    priceCents: 89_000,
+    priceCents: 5_159_000,
     photo: "1485968579580-b6d095142e6e",
     badge: "New",
     colors: [
@@ -84,7 +84,7 @@ export const seedProducts: SeedProduct[] = [
     slug: "chiffon-gown",
     name: "Pleated chiffon gown",
     categorySlug: "dresses",
-    priceCents: 54_000,
+    priceCents: 3_129_000,
     photo: "1595777457583-95e059d581b8",
     badge: "New",
     colors: [
@@ -105,7 +105,7 @@ export const seedProducts: SeedProduct[] = [
     slug: "cashmere-crew",
     name: "Cashmere crewneck sweater",
     categorySlug: "knitwear",
-    priceCents: 42_000,
+    priceCents: 2_429_000,
     photo: "1434389677669-e08b4cac3105",
     focus: [
       { x: 0.5, y: 0.3, zoom: 2 },
@@ -129,7 +129,7 @@ export const seedProducts: SeedProduct[] = [
     slug: "woven-top-handle",
     name: "Woven leather top-handle bag",
     categorySlug: "bags",
-    priceCents: 115_000,
+    priceCents: 6_669_000,
     photo: "1590874103328-eac38a683ce7",
     focus: [
       { x: 0.5, y: 0.15, zoom: 2.2 },
@@ -149,7 +149,7 @@ export const seedProducts: SeedProduct[] = [
     slug: "biker-jacket",
     name: "Lambskin biker jacket",
     categorySlug: "outerwear",
-    priceCents: 129_000,
+    priceCents: 7_479_000,
     photo: "1551028719-00167b16eac5",
     colors: [{ name: "Black", hex: "#0e0e0e" }],
     sizes: apparelSizes,
@@ -165,7 +165,7 @@ export const seedProducts: SeedProduct[] = [
     slug: "heavy-tee",
     name: "Heavyweight cotton T-shirt",
     categorySlug: "essentials",
-    priceCents: 9_500,
+    priceCents: 549_000,
     photo: "1521572163474-6864f9cf17ab",
     colors: [
       { name: "White", hex: "#f7f7f5" },
@@ -186,8 +186,8 @@ export const seedProducts: SeedProduct[] = [
     slug: "leather-pump",
     name: "Pointed leather pump",
     categorySlug: "shoes",
-    priceCents: 64_000,
-    compareAtCents: 78_000,
+    priceCents: 3_709_000,
+    compareAtCents: 4_519_000,
     photo: "1543163521-1bf539c55dd2",
     colors: [
       { name: "Floral print", hex: "#2f6fb0" },
@@ -206,7 +206,7 @@ export const seedProducts: SeedProduct[] = [
     slug: "acetate-sunglasses",
     name: "Oversized acetate sunglasses",
     categorySlug: "accessories",
-    priceCents: 31_000,
+    priceCents: 1_789_000,
     photo: "1511499767150-a48a237f0083",
     focus: [
       { x: 0.3, y: 0.45, zoom: 2.5 },
@@ -229,7 +229,7 @@ export const seedProducts: SeedProduct[] = [
     slug: "leather-sneaker",
     name: "Low-top leather sneaker",
     categorySlug: "shoes",
-    priceCents: 45_000,
+    priceCents: 2_609_000,
     photo: "1549298916-b41d501d3772",
     colors: [
       { name: "Tan", hex: "#b77a45" },
@@ -248,7 +248,7 @@ export const seedProducts: SeedProduct[] = [
     slug: "silk-trouser",
     name: "Tapered silk trouser",
     categorySlug: "trousers",
-    priceCents: 48_000,
+    priceCents: 2_779_000,
     photo: "1594633312681-425c7b97ccd1",
     colors: [
       { name: "Blush", hex: "#d9a293" },
@@ -266,7 +266,7 @@ export const seedProducts: SeedProduct[] = [
     slug: "steel-watch",
     name: "Steel automatic watch",
     categorySlug: "accessories",
-    priceCents: 240_000,
+    priceCents: 13_919_000,
     photo: "1523170335258-f5ed11844a49",
     colors: [{ name: "Steel / blue", hex: "#2b3f73" }],
     sizes: [],
@@ -281,8 +281,8 @@ export const seedProducts: SeedProduct[] = [
     slug: "loopback-sweatshirt",
     name: "Loopback cotton sweatshirt",
     categorySlug: "essentials",
-    priceCents: 36_000,
-    compareAtCents: 45_000,
+    priceCents: 2_079_000,
+    compareAtCents: 2_609_000,
     photo: "1620799140408-edc6dcb6d633",
     colors: [
       { name: "White", hex: "#f7f7f5" },
@@ -302,7 +302,7 @@ export const seedProducts: SeedProduct[] = [
     slug: "runner",
     name: "Suede panel runner",
     categorySlug: "shoes",
-    priceCents: 39_000,
+    priceCents: 2_259_000,
     photo: "1560769629-975ec94e6a86",
     colors: [
       { name: "Multi", hex: "#c9c4b8" },
@@ -320,7 +320,7 @@ export const seedProducts: SeedProduct[] = [
     slug: "denim-shirt-dress",
     name: "Washed denim shirt dress",
     categorySlug: "dresses",
-    priceCents: 39_000,
+    priceCents: 2_259_000,
     photo: "1591369822096-ffd140ec948f",
     badge: "Limited",
     colors: [

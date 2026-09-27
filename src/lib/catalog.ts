@@ -9,7 +9,7 @@ export type Product = {
   /** Category display name, plus its slug for links. */
   category: string;
   categorySlug: string;
-  /** Whole cents (USD). */
+  /** Minor units: whole centavos (PHP). */
   priceCents: number;
   compareAtCents?: number;
   /** First image is the listing image; the rest are detail shots. */
@@ -44,12 +44,12 @@ export function unsplash(id: string, w = 1600) {
   return `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=80`;
 }
 
-/** Formats whole cents as USD, dropping the decimals for round-dollar amounts. */
+/** Formats whole centavos as Philippine pesos, dropping the decimals for round-peso amounts. */
 export function formatPrice(cents: number) {
   const digits = cents % 100 === 0 ? 0 : 2;
-  return new Intl.NumberFormat("en-US", {
+  return new Intl.NumberFormat("en-PH", {
     style: "currency",
-    currency: "USD",
+    currency: "PHP",
     minimumFractionDigits: digits,
     maximumFractionDigits: digits,
   }).format(cents / 100);
@@ -125,8 +125,11 @@ export const featuredStory = {
   detailImage: unsplash("1558769132-cb1aea458c5e", 1000),
 };
 
+// Quick links in the search panel and on an empty or unmatched search.
+export const popularSearches = ["Coat", "Cashmere", "Leather", "Sneaker", "Silk", "Black"];
+
 export const services = [
-  { title: "Complimentary shipping", copy: "On all orders over $250, delivered in 2 to 4 days." },
+  { title: "Complimentary shipping", copy: "On all orders over ₱15,000, delivered in 2 to 4 days." },
   { title: "Free returns", copy: "Return or exchange within 30 days, no questions asked." },
   { title: "Repairs for life", copy: "Send any piece back to our atelier for mending." },
   { title: "Secure payment", copy: "Every transaction is encrypted end to end." },

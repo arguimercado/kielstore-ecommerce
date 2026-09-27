@@ -8,6 +8,20 @@
       "when": 1790414990920,
       "tag": "0000_eager_earthquake",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1790505886874,
+      "tag": "0001_wealthy_kang",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1790506759845,
+      "tag": "0002_solid_mindworm",
+      "breakpoints": true
     }
   ]
 }
