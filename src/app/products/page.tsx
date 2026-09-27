@@ -6,8 +6,8 @@ import { getCategories, getProducts } from "@/lib/products";
 export const revalidate = 60;
 
 export const metadata: Metadata = {
-  title: "Shop all | Maison",
-  description: "The full Maison collection: tailoring, knitwear, leather goods and shoes, made in small runs.",
+  title: "Shop all | Kiel Store",
+  description: "The full Kiel Store collection: tailoring, knitwear, leather goods and shoes, made in small runs.",
 };
 
 export default async function ProductsPage() {

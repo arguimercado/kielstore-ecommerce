@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Kiel Store monogram: a geometric K on an ink square. Shapes, not text, so it needs no font. -->
+  <rect width="32" height="32" fill="#000"/>
+  <g fill="#fff" transform="translate(-1.2 0)">
+    <rect x="9" y="7" width="3" height="18"/>
+    <polygon points="10.5,17.7 21.2,7 25.4,7 10.5,21.9"/>
+    <polygon points="13.53,16.17 15.87,13.83 24.8,25 20.6,25"/>
+  </g>
+</svg>

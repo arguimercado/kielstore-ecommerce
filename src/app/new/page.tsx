@@ -7,7 +7,7 @@ import { getNewArrivals } from "@/lib/products";
 export const revalidate = 60;
 
 export const metadata: Metadata = {
-  title: "New arrivals | Maison",
+  title: "New arrivals | Kiel Store",
   description: "The latest pieces from the atelier: tailoring, knitwear, leather goods and shoes, added as they land.",
 };
 

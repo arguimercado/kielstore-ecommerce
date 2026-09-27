@@ -18,7 +18,8 @@ npm run db:migrate   # apply migrations
 npm run db:push      # sync schema directly (no migration files)
 npm run db:studio
 npm run db:seed      # upsert the sample catalog (src/db/seed-data.ts); safe to re-run
-npm run auth:generate  # Better Auth CLI → writes src/db/auth-schema.ts
+npm run auth:generate  # Better Auth CLI → writes src/db/auth-schema.ts (don't hand-edit)
+npm run auth:make-admin -- <email>  # grant the admin role to an existing user
 ```
 
 There is no test framework yet.
@@ -30,11 +31,14 @@ Environment: copy `.env.example` to `.env.local`. It needs `DATABASE_URL` (the N
 Stack: Next.js 16 App Router, React 19 with the React Compiler (`reactCompiler: true` in `next.config.ts`), Tailwind v4 (CSS-first, through `@tailwindcss/postcss`, no `tailwind.config`), Drizzle ORM on Neon's HTTP driver, and Better Auth. `@/*` maps to `src/*`.
 
 **The schema has a single entry point.** `src/db/schema.ts` is the barrel file read by drizzle-kit (`drizzle.config.ts`), the Drizzle client (`src/db/index.ts`) and the Better Auth Drizzle adapter (`src/lib/auth.ts`, `provider: "pg"`). Every table file must be re-exported from there, or migrations, relational queries and auth won't see it:
-- Auth tables: run `npm run auth:generate` to generate `src/db/auth-schema.ts`, then add `export * from "./auth-schema"` to `schema.ts`. Regenerate whenever Better Auth plugins or options change.
+- Auth tables (`user`, `session`, `account`, `verification`) are generated into `src/db/auth-schema.ts` by `npm run auth:generate`. Regenerate it, then run `db:generate`, whenever Better Auth plugins or options change.
 - App tables (products, orders, ...): put each in its own file under `src/db/` and re-export it from `schema.ts`.
 
 **Auth flow.**
-- `src/lib/auth.ts` is the server instance. Use it in server components, route handlers and server actions, for example `auth.api.getSession({ headers: await headers() })`. Auth methods (`emailAndPassword`, `socialProviders`) are configured here. The `nextCookies()` plugin must stay **last** in `plugins`.
+- `src/lib/auth.ts` is the server instance: email and password only, DB-backed 30-day sessions with no cookie cache, and the `admin()` plugin, which adds `user.role` (`"user"` by default, `"admin"` for admins; it can't be set at sign-up). The `nextCookies()` plugin must stay **last** in `plugins`.
+- `src/lib/session.ts` is the only place pages and actions read the session: `getSession()` (cached per request), `requireUser()` (redirects to `/sign-in?callbackURL=…`), `requireAdmin()` (sign-in, or `notFound()` for non-admins) and `safeCallbackURL()`. **Every protected page, server action and route handler calls `requireUser()` or `requireAdmin()` itself.** `src/proxy.ts` is only an optimistic cookie-presence redirect for `/account` and `/admin`, and layouts don't re-run on client navigation.
+- Sign-up, sign-in and sign-out are server actions in `src/app/(auth)/actions.ts` calling `auth.api.*`. The form is `src/components/auth-form.tsx`.
+- Don't read the session in `SiteHeader` or the root layout: it would make every ISR catalog page dynamic.
 - `src/app/api/auth/[...all]/route.ts` mounts every Better Auth endpoint at `/api/auth/*`.
 - `src/lib/auth-client.ts` (`authClient`) is for client components only.
 
@@ -43,6 +47,6 @@ Stack: Next.js 16 App Router, React 19 with the React Compiler (`reactCompiler: 
 **DB driver caveat.** `drizzle-orm/neon-http` runs each query over stateless HTTP, so interactive transactions (`db.transaction`) aren't supported. Use `db.batch([...])`, or switch to the Neon WebSocket `Pool` driver if a feature needs real transactions.
 
 **Database conventions.**
-- Money is stored as integer whole cents (USD) in `*_cents` columns (`price_cents`, `compare_at_cents`). Never use floats or decimal dollars. Props and types carry cents too (`priceCents`), and only `formatPrice(cents)` converts them for display.
+- Money is Philippine pesos (PHP), stored as integer centavos (the minor unit, 1/100 peso) in `*_cents` columns (`price_cents`, `compare_at_cents`); the `cents` names mean minor units. Never use floats or decimal pesos. Props and types carry centavos too (`priceCents`), and only `formatPrice(cents)` converts them for display.
 - Inventory lives in the separate `stock` table (one row per product), not on `products`. A product with no stock row counts as sold out.
 - Pages and components read the catalog through `src/lib/products.ts`, which returns the storefront `Product` type. Don't query the product tables directly from UI code.

@@ -15,7 +15,7 @@ export const products = pgTable(
     categoryId: integer("category_id")
       .notNull()
       .references(() => categories.id, { onDelete: "restrict" }),
-    /** Prices are whole cents (USD). */
+    /** Prices are whole centavos (PHP), the currency's minor unit. */
     priceCents: integer("price_cents").notNull(),
     compareAtCents: integer("compare_at_cents"),
     badge: productBadge(),

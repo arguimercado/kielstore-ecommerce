@@ -1,10 +1,10 @@
 // Server-side catalog queries. Returns the storefront's `Product` shape so
 // components don't depend on table layout.
 
-import { asc, desc, eq, inArray, ne, sql } from "drizzle-orm";
+import { and, asc, desc, eq, ilike, inArray, ne, or, sql } from "drizzle-orm";
 import { cache } from "react";
 import { db } from "@/db";
-import { categories, products, stock } from "@/db/schema";
+import { categories, products, stock, wishlistItems } from "@/db/schema";
 import type { Product } from "@/lib/catalog";
 
 function selectProducts() {
@@ -80,6 +80,47 @@ export async function getCategory(slug: string) {
 /** Most recently added first; newer ids break ties from bulk inserts. */
 export async function getNewArrivals(limit = 24) {
   const rows = await selectProducts().orderBy(desc(products.createdAt), desc(products.id)).limit(limit);
+  return rows.map(toProduct);
+}
+
+const MAX_SEARCH_TERMS = 8;
+
+/** ILIKE pattern that matches `text` anywhere, with LIKE wildcards in the text escaped. */
+function containsPattern(text: string) {
+  return `%${text.replace(/[\\%_]/g, "\\$&")}%`;
+}
+
+/**
+ * Products where every word of `query` appears in the name, category,
+ * description or a colour name. Pieces whose name holds the whole query
+ * come first, then catalog order.
+ */
+export async function searchProducts(query: string, limit = 48) {
+  const terms = query.split(/\s+/).filter(Boolean).slice(0, MAX_SEARCH_TERMS);
+  if (terms.length === 0) return [];
+
+  const everyTerm = terms.map((term) => {
+    const pattern = containsPattern(term);
+    return or(
+      ilike(products.name, pattern),
+      ilike(categories.name, pattern),
+      ilike(products.description, pattern),
+      sql`exists (select 1 from jsonb_array_elements(${products.colors}) as c where c->>'name' ilike ${pattern})`,
+    );
+  });
+
+  const rows = await selectProducts()
+    .where(and(...everyTerm))
+    .orderBy(desc(ilike(products.name, containsPattern(query))), asc(products.id))
+    .limit(limit);
+  return rows.map(toProduct);
+}
+
+/** A user's saved products, most recently saved first. */
+export async function getWishlistProducts(userId: string) {
+  const rows = await selectProducts()
+    .innerJoin(wishlistItems, and(eq(wishlistItems.productId, products.id), eq(wishlistItems.userId, userId)))
+    .orderBy(desc(wishlistItems.createdAt));
   return rows.map(toProduct);
 }
 
