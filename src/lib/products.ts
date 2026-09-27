@@ -59,6 +59,30 @@ export async function getProductsBySlugs(slugs: string[]) {
   return slugs.flatMap((slug) => bySlug.get(slug) ?? []);
 }
 
+/** The whole catalog, or one category, in catalog order. */
+export async function getProducts(categorySlug?: string) {
+  const rows = await selectProducts()
+    .where(categorySlug ? eq(categories.slug, categorySlug) : undefined)
+    .orderBy(asc(products.id));
+  return rows.map(toProduct);
+}
+
+/** Product categories in catalog order. Deduplicated per request. */
+export const getCategories = cache(async () => {
+  return db.select({ slug: categories.slug, name: categories.name }).from(categories).orderBy(asc(categories.id));
+});
+
+export async function getCategory(slug: string) {
+  const all = await getCategories();
+  return all.find((c) => c.slug === slug);
+}
+
+/** Most recently added first; newer ids break ties from bulk inserts. */
+export async function getNewArrivals(limit = 24) {
+  const rows = await selectProducts().orderBy(desc(products.createdAt), desc(products.id)).limit(limit);
+  return rows.map(toProduct);
+}
+
 /** Same-category pieces first, then the rest of the catalog. */
 export async function getRelated(product: Product, count = 6) {
   const rows = await selectProducts()

@@ -6,7 +6,16 @@ import { getStockState, type Product } from "@/lib/catalog";
 
 const gridSizes = "(min-width: 80rem) 25vw, (min-width: 48rem) 33vw, 50vw";
 
-export function ProductCard({ product, sizes = gridSizes }: { product: Product; sizes?: string }) {
+export function ProductCard({
+  product,
+  sizes = gridSizes,
+  loading,
+}: {
+  product: Product;
+  sizes?: string;
+  /** "eager" for above-the-fold cards; applies to the listing image only. */
+  loading?: "eager" | "lazy";
+}) {
   const [image, hoverImage] = product.gallery;
   const soldOut = getStockState(product.stock) === "sold-out";
   const badge = soldOut ? "Sold out" : product.badge;
@@ -15,7 +24,7 @@ export function ProductCard({ product, sizes = gridSizes }: { product: Product; 
     <article className="group relative">
       <Link href={`/products/${product.slug}`} className="block">
         <div className="media-frame aspect-product">
-          <Image src={image} alt={product.name} fill sizes={sizes} />
+          <Image src={image} alt={product.name} fill sizes={sizes} loading={loading} />
           {/* Detail shot fades in on hover, like flipping to the close-up. */}
           {hoverImage && (
             <Image
