@@ -17,14 +17,14 @@ npm run db:generate  # drizzle-kit: SQL migrations from schema → ./drizzle
 npm run db:migrate   # apply migrations
 npm run db:push      # sync schema directly (no migration files)
 npm run db:studio
-npm run db:seed      # upsert the sample catalog (src/db/seed-data.ts); safe to re-run
+npm run db:seed      # upsert the sample catalog (src/db/seed-data.ts) and prune products/categories not in it; safe to re-run
 npm run auth:generate  # Better Auth CLI → writes src/db/auth-schema.ts (don't hand-edit)
 npm run auth:make-admin -- <email>  # grant the admin role to an existing user
 ```
 
 There is no test framework yet.
 
-Environment: copy `.env.example` to `.env.local`. It needs `DATABASE_URL` (the Neon **pooled** connection string), `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL` and `NEXT_PUBLIC_APP_URL`. `drizzle.config.ts` loads `.env.local`, then `.env`. `src/db/index.ts` throws at import time if `DATABASE_URL` is missing.
+Environment: copy `.env.example` to `.env.local`. It needs `DATABASE_URL` (the Neon **pooled** connection string), `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`, `NEXT_PUBLIC_APP_URL`, `STRIPE_SECRET_KEY` and `STRIPE_WEBHOOK_SECRET`. `drizzle.config.ts` loads `.env.local`, then `.env`. `src/db/index.ts` throws at import time if `DATABASE_URL` is missing, and `src/lib/stripe.ts` does the same for `STRIPE_SECRET_KEY`.
 
 ## Architecture
 
@@ -36,7 +36,7 @@ Stack: Next.js 16 App Router, React 19 with the React Compiler (`reactCompiler: 
 
 **Auth flow.**
 - `src/lib/auth.ts` is the server instance: email and password only, DB-backed 30-day sessions with no cookie cache, and the `admin()` plugin, which adds `user.role` (`"user"` by default, `"admin"` for admins; it can't be set at sign-up). The `nextCookies()` plugin must stay **last** in `plugins`.
-- `src/lib/session.ts` is the only place pages and actions read the session: `getSession()` (cached per request), `requireUser()` (redirects to `/sign-in?callbackURL=…`), `requireAdmin()` (sign-in, or `notFound()` for non-admins) and `safeCallbackURL()`. **Every protected page, server action and route handler calls `requireUser()` or `requireAdmin()` itself.** `src/proxy.ts` is only an optimistic cookie-presence redirect for `/account` and `/admin`, and layouts don't re-run on client navigation.
+- `src/lib/session.ts` is the only place pages and actions read the session: `getSession()` (cached per request), `requireUser()` (redirects to `/sign-in?callbackURL=…`), `requireAdmin()` (sign-in, or `notFound()` for non-admins) and `safeCallbackURL()`. **Every protected page, server action and route handler calls `requireUser()` or `requireAdmin()` itself.** `src/proxy.ts` is only an optimistic cookie-presence redirect for `/account`, `/admin`, `/bag` and `/checkout`, and layouts don't re-run on client navigation.
 - Sign-up, sign-in and sign-out are server actions in `src/app/(auth)/actions.ts` calling `auth.api.*`. The form is `src/components/auth-form.tsx`.
 - Don't read the session in `SiteHeader` or the root layout: it would make every ISR catalog page dynamic.
 - `src/app/api/auth/[...all]/route.ts` mounts every Better Auth endpoint at `/api/auth/*`.
@@ -51,11 +51,12 @@ Stack: Next.js 16 App Router, React 19 with the React Compiler (`reactCompiler: 
 - Each product colour (`colors` jsonb) has a display `name`, a `hex` and a `family` (`ColorFamily` in `src/lib/catalog.ts`). Shop filters match on `family`, so give every new colour one. The filter URL contract (`size`, `color`, `price`, `stock`, `sort`, `view`) lives in `src/lib/filters.ts`.
 - Inventory lives in the separate `stock` table (one row per product), not on `products`. A product with no stock row counts as sold out.
 - The bag (`cart_items`, signed-in users only) stores no prices. `src/lib/cart.ts` reads the current `price_cents` and holds every stock rule. Stock is per product, so all of one product's lines (any colour or size) share its `stock.quantity`.
+- The wishlist (`wishlist_items`, signed-in users only) is keyed by product. `src/lib/wishlist.ts` takes the user id from the session and never trusts a client-supplied one. It's listed at `/account/wishlist`.
 - Pages and components read the catalog through `src/lib/products.ts`, which returns the storefront `Product` type. Don't query the product tables directly from UI code.
 
 **Checkout and orders (Stripe).**
 - Stripe Checkout is hosted, and sessions use inline `price_data` built from the order snapshot. No Stripe Products or Prices exist. `src/lib/stripe.ts` is the server-only client, pinned to API version `2026-08-26.dahlia`. It needs `STRIPE_SECRET_KEY` (a restricted `rk_` key), and the webhook needs `STRIPE_WEBHOOK_SECRET`.
-- `orders`, `order_items` and `stripe_events` live in `src/db/orders.ts`. An order copies its lines and prices from the bag when checkout starts and never re-reads the catalog.
+- `orders`, `order_items` and `stripe_events` live in `src/db/orders.ts`. Their queries and status transitions (`createPendingOrder`, `releaseReservation`, `markOrder*`, `recordStripeEvent`) live in `src/lib/orders.ts`. An order copies its lines and prices from the bag when checkout starts and never re-reads the catalog.
 - Stock is **reserved when checkout starts**. `createPendingOrder` inserts the order and its lines and calls the `reserve_order_stock()` SQL function (custom migration `drizzle/0005_reserve_order_stock.sql`), all in one `db.batch`. A shortfall raises `23514` and rolls the whole batch back. `releaseReservation` returns the stock at most once, guarded by `status` and `stock_released_at`.
 - Payment state comes only from Stripe. `src/lib/checkout.ts` has `handleStripeEvent` for the webhook at `src/app/api/stripe/webhook/route.ts`, and `fulfillCheckout(sessionId)` for the success page. Both re-read the session from Stripe, and an order becomes `paid` only if `amount_total` and `currency` match the order. Otherwise it becomes `needs_review`.
 - Every status change is a conditional `UPDATE … WHERE status IN (…)`, so replayed or concurrent events apply once. `stripe_events` records handled event ids. At most one `pending` order exists per user, enforced by a partial unique index.

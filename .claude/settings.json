@@ -1,20 +1,26 @@
 {
-    "permissions": {
-      "allow": [
-        "Bash(pnpm build)",
-        "Bash(pnpm test *)",
-        "Bash(pnpm typecheck)",
-        "Bash(git status)",
-        "Bash(git diff *)"
-      ],
-      "ask": [
-        "Bash(git push *)"
-      ],
-      "deny": [
-        "Read(.env)",
-        "Read(.env.*)",
-        "Edit(.env)",
-        "Edit(.env.*)"
-      ]
-    }
+  "permissions": {
+    "allow": [
+      "Bash(npm run build)",
+      "Bash(npm run lint)",
+      "Bash(npm run typecheck)",
+      "Bash(git status)",
+      "Bash(git diff *)"
+    ],
+    "ask": [
+      "Bash(git push *)"
+    ],
+    "deny": [
+      "Read(.env)",
+      "Read(.env.local)",
+      "Read(.env*.local)",
+      "Read(.env.production)",
+      "Read(.env.development)",
+      "Edit(.env)",
+      "Edit(.env.local)",
+      "Edit(.env*.local)",
+      "Edit(.env.production)",
+      "Edit(.env.development)"
+    ]
   }
+}
