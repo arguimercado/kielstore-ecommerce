@@ -149,13 +149,13 @@ export default async function ProductPage(props: PageProps<"/products/[slug]">) 
                 <Disclosure title="Size and fit" id="size-and-fit">
                   <p>
                     Available in {product.sizes[0]} to {product.sizes.at(-1)}. If you are between sizes, we recommend
-                    taking the larger size. Our client advisors are happy to help with fit.
+                    taking the larger size. Our outfitting team is happy to help with fit and crew sizing.
                   </p>
                 </Disclosure>
               )}
               <Disclosure title="Shipping and returns">
                 <p>
-                  {shipping.copy} {returns.copy} Every order arrives in our signature packaging.
+                  {shipping.copy} {returns.copy} Every order ships in durable, recyclable packaging.
                 </p>
               </Disclosure>
             </div>

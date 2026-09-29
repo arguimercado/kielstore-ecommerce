@@ -14,7 +14,7 @@ export async function generateMetadata(props: PageProps<"/[category]">): Promise
 
   return {
     title: `${category.name} | Kiel Store`,
-    description: `Shop ${category.name.toLowerCase()} at Kiel Store, made in small runs and built to last.`,
+    description: `Shop ${category.name.toLowerCase()} at Kiel Store, crew and workwear made to safety standard.`,
     // Filtered and sorted variations are near-duplicates of the plain page.
     ...(Object.keys(searchParams).length > 0 && { robots: { index: false, follow: true } }),
   };

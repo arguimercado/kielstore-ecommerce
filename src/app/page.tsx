@@ -30,7 +30,7 @@ export default async function Home() {
         <div className="media-frame w-full aspect-campaign-tall md:aspect-campaign lg:max-h-[calc(100svh-var(--header-h))]">
           <Image
             src={hero.image}
-            alt="Woman in a burgundy wool coat carrying shopping bags"
+            alt="Container ship berthed beneath gantry cranes at a port"
             fill
             priority
             sizes="100vw"
@@ -47,10 +47,10 @@ export default async function Home() {
             <p className="mt-5 max-w-md text-body-lg text-ink-muted max-md:hidden">{hero.copy}</p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link href="/new" className="btn btn-primary">
-                Shop the collection
+                Shop the range
               </Link>
               <Link href="/journal/the-quiet-season" className="btn btn-secondary max-sm:hidden">
-                View the campaign
+                Outfit your crew
               </Link>
             </div>
           </div>
@@ -60,7 +60,7 @@ export default async function Home() {
       {/* Shop by category */}
       <section className="section">
         <div className="container-page">
-          <SectionHeading eyebrow="Shop by category" title="Start with the essentials" />
+          <SectionHeading eyebrow="Shop by category" title="Kit for every role" />
           <ul className="mt-8 grid grid-cols-2 gap-x-grid gap-y-8 md:mt-10 lg:grid-cols-4">
             {categories.map((cat) => (
               <li key={cat.slug}>
@@ -132,7 +132,7 @@ export default async function Home() {
           <div className="media-frame aspect-product">
             <Image
               src={featuredStory.image}
-              alt="Rail of neutral-toned garments in the atelier"
+              alt="Container ship under way at sea"
               fill
               sizes="(min-width: 48rem) 50vw, 100vw"
             />
@@ -146,7 +146,7 @@ export default async function Home() {
                 <Image src={featuredStory.detailImage} alt="" fill sizes="10rem" />
               </div>
               <Link href="/journal/atelier" className="eyebrow link-reveal">
-                Inside the atelier
+                How we outfit a fleet
               </Link>
             </div>
           </div>
@@ -158,7 +158,7 @@ export default async function Home() {
         <div className="container-page">
           <SectionHeading
             eyebrow="Most wanted"
-            title="The pieces everyone is asking for"
+            title="What crews reorder most"
             action={{ href: "/bestsellers", label: "Shop bestsellers" }}
           />
         </div>

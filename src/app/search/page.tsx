@@ -47,7 +47,7 @@ export default async function SearchPage(props: PageProps<"/search">) {
 
         <header className="pt-4 md:pt-6">
           <p className="eyebrow text-ink-muted">Search</p>
-          <h1 className="mt-3 text-headline break-words">{q ? `Results for “${q}”` : "Search the collection"}</h1>
+          <h1 className="mt-3 text-headline break-words">{q ? `Results for “${q}”` : "Search the range"}</h1>
           {/* Keyed so the box shows the new query after navigating between searches. */}
           <SearchForm key={q} defaultValue={q} className="mt-8 max-w-reading md:mt-10" />
         </header>

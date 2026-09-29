@@ -48,7 +48,7 @@ export function SearchForm({
           required
           maxLength={100}
           defaultValue={defaultValue}
-          placeholder="Search coats, knitwear, leather…"
+          placeholder="Search boots, coveralls, bags…"
           autoComplete="off"
           enterKeyHint="search"
           className="field pr-12"

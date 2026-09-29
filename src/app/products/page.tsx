@@ -9,7 +9,7 @@ export async function generateMetadata(props: PageProps<"/products">): Promise<M
   const searchParams = await props.searchParams;
   return {
     title: "Shop all | Kiel Store",
-    description: "The full Kiel Store collection: tailoring, knitwear, leather goods and shoes, made in small runs.",
+    description: "The full Kiel Store range: uniforms, safety shoes, crew T-shirts and bags for the deck, the engine room and the site.",
     // Filtered and sorted variations are near-duplicates of the plain page.
     ...(Object.keys(searchParams).length > 0 && { robots: { index: false, follow: true } }),
   };

@@ -1,6 +1,6 @@
 ---
 name: design-system
-description: Use when building or restyling any UI in this storefront (pages, layouts, headers, product cards, grids, PDPs, carts, forms, buttons, links). Covers the monochrome editorial design system in src/app/globals.css, including its color tokens, type scale, spacing, containers, buttons, links, fields and responsive layout primitives, and the rules for using them.
+description: Use when building or restyling any UI in this storefront (pages, layouts, headers, product cards, grids, PDPs, carts, forms, buttons, links). Covers the black-and-white maritime workwear design system in src/app/globals.css, including its color tokens, type scale, spacing, containers, buttons, links, fields and responsive layout primitives, and the rules for using them.
 ---
 
 # Storefront design system
@@ -9,9 +9,9 @@ The source of truth is `src/app/globals.css` (Tailwind v4, CSS-first, no `tailwi
 
 ## Principles
 
-- **Monochrome and image-led.** The UI is black on white. Colour comes from product photography. Use `accent`, `danger` and `success` sparingly and only for meaning (sale price, error, confirmation).
+- **Black and white, with a maritime cast.** The UI is deep-sea navy ink (`#0b1622`) on white, with cool steel greys for surfaces, the direction of shipping brands like Maersk. Colour comes from product photography. `accent` is safety orange; use it, `danger` and `success` sparingly and only for meaning (sale price, error, confirmation).
 - **Square and hairline.** Never use `rounded-*` on UI (buttons, cards, inputs, images, modals). Borders are 1px, `border-line` by default and `border-line-strong` for emphasis. No drop shadows. Use a hairline or a `surface` fill to separate things.
-- **Quiet type.** One sans font (Geist, `font-sans`). Headings use weight 400, never bold. Hierarchy comes from size, whitespace and uppercase tracked labels.
+- **Signage type.** Two faces from one family (see Fonts). Section and hero headlines (`text-headline`, `text-display`) are Barlow Condensed at weight 600, uppercase, like port and deck signage. Everything else is Barlow; h1 to h4 default to weight 500. Never uppercase product names, and never go heavier than 600.
 - **Generous whitespace.** Separate sections with `py-section`. Don't cram content.
 - **Slow, soft motion.** Use the default transition or `ease-luxe`. No bounce or scale-pop effects. Reduced motion is already handled globally.
 
@@ -29,7 +29,18 @@ The source of truth is `src/app/globals.css` (Tailwind v4, CSS-first, no `tailwi
 | `line` / `line-strong` | hairlines / outlined buttons, focused fields |
 | `accent`, `danger`, `success` | meaning only |
 
-To flip a region to white on black (promo bands, hero overlays, footer), add the **`.theme-inverse`** class. Every token inside it swaps, so children need no changes. Don't hand-code `bg-black text-white`.
+To flip a region to white on navy (promo bands, hero overlays, footer), add the **`.theme-inverse`** class. Every token inside it swaps, so children need no changes. Don't hand-code `bg-black text-white`.
+
+Every text token pair passes WCAG AA (≥ 4.5:1) on `canvas` and `surface`, including `accent` and the inverse pairs. Re-check if you change a colour.
+
+### Fonts
+
+| Utility | Face | Use |
+|---|---|---|
+| `font-sans` (body default) | Barlow 400 / 500 / 600 | UI, body copy, labels, product names, prices, `text-title` |
+| `font-display` | Barlow Condensed 500 / 600 | applied automatically by `text-headline` and `text-display` (with uppercase) |
+
+Both load in `src/app/layout.tsx` through `next/font/google`. The uppercase display treatment is a base rule on the plain `.text-headline` and `.text-display` classes, so a responsive variant such as `md:text-headline` changes size only (the PDP title uses this to stay in mixed case).
 
 ### Type (`text-*`; size, line height, tracking and weight come bundled)
 
@@ -39,9 +50,9 @@ To flip a region to white on black (promo bands, hero overlays, footer), add the
 | `text-caption` | 12px | meta, legal, swatch names |
 | `text-body` | 14px (body default) | UI copy, product names, prices |
 | `text-body-lg` | 16px | long-form copy, inputs |
-| `text-title` | 20px | PDP product name, drawer and panel titles |
-| `text-headline` | fluid 28 → 44px | section headings |
-| `text-display` | fluid 40 → 104px | campaign heroes only |
+| `text-title` | 20px, Barlow 500 | PDP product name, drawer and panel titles |
+| `text-headline` | fluid 30 → 48px, condensed 600, uppercase | section headings |
+| `text-display` | fluid 44 → 112px, condensed 600, uppercase | campaign heroes only |
 
 `eyebrow` is the uppercase label style: 11px, weight 500, 0.1em tracking. Use it for nav items, section kickers, filter and sort labels, and tab labels. `tracking-wide-label` (0.18em) is for sparse, standalone labels.
 
@@ -130,5 +141,5 @@ Header: `sticky top-0 z-40 h-header bg-canvas border-b border-line`, with a `con
 - Add or change tokens in `globals.css` only. Raw values go in `:root` (and in `.theme-inverse` if they are colours), exposed through `@theme inline`. Static values go in `@theme`. Responsive values change `:root` vars inside `@media (width >= …)` blocks.
 - CSS written in `globals.css` reads the raw vars (`var(--ink)`), not `var(--color-ink)`. The `--color-*` aliases resolve on `:root` and don't follow `.theme-inverse`.
 - Put reusable multi-property patterns in `globals.css`: component classes in `@layer components`, responsive primitives as `@utility`. Don't copy them as long class strings.
-- Don't reintroduce Tailwind palette colours, rounded corners, shadows or bold headings.
+- Don't reintroduce Tailwind palette colours, rounded corners, shadows, or weights above 600.
 - Check that text contrast stays at WCAG AA or above, on both `canvas` and `surface`.

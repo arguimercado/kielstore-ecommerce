@@ -8,10 +8,10 @@ import { WishlistHeaderLink } from "@/components/wishlist-button";
 
 const nav = [
   { href: "/new", label: "New in" },
-  { href: "/women", label: "Women" },
-  { href: "/men", label: "Men" },
-  { href: "/bags", label: "Bags" },
+  { href: "/uniforms", label: "Uniforms" },
   { href: "/shoes", label: "Shoes" },
+  { href: "/t-shirts", label: "T-shirts" },
+  { href: "/bags", label: "Bags" },
   { href: "/journal", label: "Journal" },
 ];
 
@@ -20,7 +20,7 @@ export function SiteHeader() {
     <>
       <div className="theme-inverse">
         <p className="container-page py-2 text-center text-caption">
-          Complimentary shipping and returns on orders over ₱15,000
+          Complimentary shipping and returns on orders over ₱5,000
         </p>
       </div>
       <header className="sticky top-0 z-40 h-header border-b border-line bg-canvas">

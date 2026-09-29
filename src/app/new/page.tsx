@@ -8,7 +8,7 @@ export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "New arrivals | Kiel Store",
-  description: "The latest pieces from the atelier: tailoring, knitwear, leather goods and shoes, added as they land.",
+  description: "The latest crew and workwear: uniforms, safety shoes, T-shirts and bags, added as they land.",
 };
 
 // Cards in the first row at the widest grid (4 columns) load eagerly; one of them is the LCP.
@@ -39,8 +39,8 @@ export default async function NewArrivalsPage() {
             <p className="eyebrow text-ink-muted">Just landed</p>
             <h1 className="mt-3 text-headline">New arrivals</h1>
             <p className="mt-4 max-w-reading text-body-lg text-ink-muted">
-              The latest pieces from the atelier, added as they arrive. Cut in small runs, so the newest sizes go
-              first.
+              The latest uniforms, safety shoes and crew kit, added as they arrive. Popular sizes go first, so
+              order early for your next rotation.
             </p>
           </div>
           {products.length > 0 && (
