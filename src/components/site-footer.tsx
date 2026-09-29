@@ -1,9 +1,9 @@
 import Link from "next/link";
 
 const columns = [
-  { title: "Shop", links: ["New in", "Women", "Men", "Bags", "Shoes", "Gift cards"] },
+  { title: "Shop", links: ["New in", "Uniforms", "Shoes", "T-shirts", "Bags", "Fleet orders"] },
   { title: "Client services", links: ["Contact us", "Shipping", "Returns", "Size guide", "Repairs"] },
-  { title: "Kiel Store", links: ["Our story", "Atelier", "Sustainability", "Journal", "Careers"] },
+  { title: "Kiel Store", links: ["Our story", "Safety standards", "Sustainability", "Journal", "Careers"] },
 ];
 
 export function SiteFooter() {
@@ -13,9 +13,9 @@ export function SiteFooter() {
         <div className="grid gap-12 lg:grid-cols-[2fr_3fr]">
           <form className="max-w-md" action="#">
             <p className="eyebrow text-ink-muted">Newsletter</p>
-            <h2 className="mt-3 text-headline">First to know</h2>
+            <h2 className="mt-3 text-headline">Stay on watch</h2>
             <p className="mt-4 text-body text-ink-muted">
-              New collections, private sales and stories from the atelier. No more than twice a month.
+              New kit, fleet offers and updates on safety standards. No more than twice a month.
             </p>
             <label htmlFor="newsletter-email" className="sr-only">
               Email address

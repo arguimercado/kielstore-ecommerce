@@ -70,40 +70,39 @@ export function formatPrice(cents: number) {
 }
 
 export const hero = {
-  eyebrow: "Autumn / Winter 2026",
-  title: "The quiet season",
-  copy: "Tailoring in soft wool, heavy knits and leather built to last. A wardrobe that asks for nothing and gives everything.",
-  image: unsplash("1483985988355-763728e1935b", 2400),
+  eyebrow: "Crew & workwear outfitters",
+  title: "Built for every shift",
+  copy: "Uniforms, safety shoes and crew bags made to standard for the deck, the engine room and the site.",
+  image: unsplash("1578575437130-527eed3abbec", 2400),
 };
 
-// Homepage "Shop by category" tiles. These are editorial departments, not the
-// product categories stored in the database.
+// Homepage "Shop by category" tiles, one per product category in the database.
 export const categories: Category[] = [
-  { slug: "women", name: "Women", image: unsplash("1515886657613-9f3515b0c78f", 1000) },
-  { slug: "men", name: "Men", image: unsplash("1617137968427-85924c800a22", 1000) },
-  { slug: "bags", name: "Bags", image: unsplash("1584917865442-de89df76afd3", 1000) },
-  { slug: "shoes", name: "Shoes", image: unsplash("1535043934128-cf0b28d52f95", 1000) },
+  { slug: "uniforms", name: "Uniforms", image: unsplash("1559841066-615e601351cb", 1000) },
+  { slug: "shoes", name: "Shoes", image: unsplash("1520639888713-7851133b1ed0", 1000) },
+  { slug: "t-shirts", name: "T-shirts", image: unsplash("1562157873-818bc0726f68", 1000) },
+  { slug: "bags", name: "Bags", image: unsplash("1473188588951-666fce8e7c68", 1000) },
 ];
 
 // Curated homepage merchandising, resolved against the database by slug.
 export const newArrivalSlugs = [
-  "wool-overcoat",
-  "chiffon-gown",
-  "cashmere-crew",
-  "woven-top-handle",
-  "biker-jacket",
-  "heavy-tee",
-  "leather-pump",
-  "acetate-sunglasses",
+  "engine-room-boiler-suit",
+  "s3-steel-toe-boot",
+  "captains-dress-whites",
+  "crew-sea-duffel",
+  "deck-crew-hi-vis-coverall",
+  "engineer-long-sleeve-tee",
+  "composite-toe-work-boot",
+  "captains-document-bag",
 ];
 
 export const mostWantedSlugs = [
-  "leather-sneaker",
-  "silk-trouser",
-  "steel-watch",
-  "loopback-sweatshirt",
-  "runner",
-  "denim-shirt-dress",
+  "slip-resistant-deck-boot",
+  "crew-cotton-tee",
+  "security-patrol-uniform",
+  "engineer-tool-bag",
+  "construction-hi-vis-jacket",
+  "security-utility-backpack",
 ];
 
 export type StockState = "in-stock" | "low-stock" | "sold-out";
@@ -118,33 +117,34 @@ export function getStockState(stock: number): StockState {
 
 export const editorialPair: Collection[] = [
   {
-    slug: "tailoring",
+    slug: "deck-and-engine",
     eyebrow: "Collection",
-    title: "New tailoring",
-    image: unsplash("1507679799987-c73779587ccf", 1600),
+    title: "Deck & engine crew",
+    image: unsplash("1660543228631-3f2341090afe", 1600),
   },
   {
-    slug: "city",
+    slug: "site-and-security",
     eyebrow: "Collection",
-    title: "City layers",
-    image: unsplash("1539109136881-3be0616acf4b", 1600),
+    title: "Site & security",
+    image: unsplash("1694521787193-9293daeddbaa", 1600),
   },
 ];
 
 export const featuredStory = {
-  eyebrow: "The edit",
-  title: "Pieces made to be kept",
-  copy: "Our atelier works with a handful of mills in Italy and Portugal. Every garment is cut in small runs, finished by hand and backed by free repairs for life.",
-  image: unsplash("1490481651871-ab68de25d43d", 1600),
-  detailImage: unsplash("1558769132-cb1aea458c5e", 1000),
+  eyebrow: "Fleet outfitting",
+  title: "Kit for the whole crew",
+  copy: "From the master's whites to the motorman's boiler suit, we outfit entire vessels and job sites. Every piece is tested to its safety standard and sized for the crew who wear it.",
+  image: unsplash("1605745341112-85968b19335b", 1600),
+  detailImage: unsplash("1662309376159-b95fb193d96b", 1000),
 };
 
 // Quick links in the search panel and on an empty or unmatched search.
-export const popularSearches = ["Coat", "Cashmere", "Leather", "Sneaker", "Silk", "Black"];
+export const popularSearches = ["Safety boot", "Coverall", "Hi-vis", "Captain", "Duffel", "Navy"];
 
+// The PDP reads the first two (shipping, returns) by position.
 export const services = [
-  { title: "Complimentary shipping", copy: "On all orders over ₱15,000, delivered in 2 to 4 days." },
+  { title: "Complimentary shipping", copy: "On all orders over ₱5,000, delivered in 2 to 4 days." },
   { title: "Free returns", copy: "Return or exchange within 30 days, no questions asked." },
-  { title: "Repairs for life", copy: "Send any piece back to our atelier for mending." },
+  { title: "Certified protection", copy: "Safety footwear and hi-vis tested to EN ISO standards." },
   { title: "Secure payment", copy: "Every transaction is encrypted end to end." },
 ];

@@ -1,6 +1,6 @@
 // Shop filters: the URL contract for /products and category pages. Pure, so
 // server pages and the client filter form share one parser and one link builder.
-//   ?size=M&size=38&color=black&price=20-30k&stock=in&sort=price-asc&view=list
+//   ?size=M&size=38&color=black&price=1-3k&stock=in&sort=price-asc&view=list
 
 import type { ColorFamily } from "@/lib/catalog";
 
@@ -20,10 +20,10 @@ export const COLOR_FAMILIES: { id: ColorFamily; label: string; hex: string }[] =
 
 /** Price bands in centavos; `max` is exclusive, absent for the top band. */
 export const PRICE_BANDS = [
-  { id: "under-20k", label: "Under ₱20,000", min: 0, max: 2_000_000 },
-  { id: "20-30k", label: "₱20,000 – ₱30,000", min: 2_000_000, max: 3_000_000 },
-  { id: "30-50k", label: "₱30,000 – ₱50,000", min: 3_000_000, max: 5_000_000 },
-  { id: "50k-plus", label: "₱50,000 and above", min: 5_000_000 },
+  { id: "under-1k", label: "Under ₱1,000", min: 0, max: 100_000 },
+  { id: "1-3k", label: "₱1,000 – ₱3,000", min: 100_000, max: 300_000 },
+  { id: "3-5k", label: "₱3,000 – ₱5,000", min: 300_000, max: 500_000 },
+  { id: "5k-plus", label: "₱5,000 and above", min: 500_000 },
 ] as const satisfies readonly { id: string; label: string; min: number; max?: number }[];
 
 export const SORTS = [
@@ -35,8 +35,8 @@ export const SORTS = [
 
 /** Display order for size options; sizes outside these runs sort after them. */
 export const SIZE_GROUPS = [
-  { label: "Clothing", sizes: ["XS", "S", "M", "L", "XL"] },
-  { label: "Shoes", sizes: ["36", "37", "38", "39", "40", "41"] },
+  { label: "Clothing", sizes: ["XS", "S", "M", "L", "XL", "XXL"] },
+  { label: "Shoes", sizes: ["38", "39", "40", "41", "42", "43", "44", "45", "46"] },
 ];
 
 export type PriceBandId = (typeof PRICE_BANDS)[number]["id"];

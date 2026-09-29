@@ -1,9 +1,10 @@
 @import "tailwindcss";
 
 /* ==========================================================================
-   Design system: editorial luxury retail
-   Monochrome, square-cornered, image-led. Small uppercase tracked labels,
-   generous whitespace, hairline borders, large fluid display type.
+   Design system: crew and workwear outfitter
+   Black-and-white with a maritime cast: deep-sea navy ink, cool steel
+   surfaces, one safety-orange accent. Square-cornered, image-led, hairline
+   borders, condensed uppercase headlines like port and deck signage.
    Raw values live on :root so scopes like .theme-inverse can swap them;
    @theme inline exposes them as Tailwind utilities. CSS in this file reads
    the raw vars (var(--ink)), never var(--color-ink): --color-* resolves on
@@ -11,16 +12,16 @@
    ========================================================================== */
 
 :root {
-  /* Color: near-pure monochrome. Colour comes from photography, not UI. */
+  /* Color: white and deep-sea navy. Colour comes from photography, not UI. */
   --canvas: #ffffff;
-  --surface: #f5f5f3; /* product image backdrop, subtle panels */
-  --surface-strong: #ebebe8;
-  --ink: #000000;
-  --ink-muted: #5e5e5e; /* secondary copy, meta: passes AA on canvas + surface */
-  --ink-subtle: #8a8a8a; /* placeholders, disabled */
-  --line: #e0e0e0; /* hairlines, dividers */
-  --line-strong: #000000; /* outlined buttons, focused fields */
-  --accent: #5c1a1b; /* restrained oxblood, use sparingly */
+  --surface: #f2f4f6; /* cool steel: product image backdrop, subtle panels */
+  --surface-strong: #e5e9ed;
+  --ink: #0b1622; /* near-black navy */
+  --ink-muted: #5a6472; /* secondary copy, meta: passes AA on canvas + surface */
+  --ink-subtle: #8a93a0; /* placeholders, disabled */
+  --line: #dde2e7; /* hairlines, dividers */
+  --line-strong: #0b1622; /* outlined buttons, focused fields */
+  --accent: #c2410c; /* safety orange, meaning only, use sparingly */
   --danger: #b3261e; /* errors, sale prices */
   --success: #1e5e3a;
 
@@ -52,15 +53,15 @@
   }
 }
 
-/* Inverted scope for black bands, hero overlays, footers. */
+/* Inverted scope for navy bands, hero overlays, footers. */
 .theme-inverse {
-  --canvas: #000000;
-  --surface: #141414;
-  --surface-strong: #1f1f1f;
+  --canvas: #0b1622;
+  --surface: #132233;
+  --surface-strong: #1b2d42;
   --ink: #ffffff;
-  --ink-muted: #b0b0b0;
-  --ink-subtle: #7a7a7a;
-  --line: #2e2e2e;
+  --ink-muted: #a9b4c2;
+  --ink-subtle: #7d8a99;
+  --line: #24364b;
   --line-strong: #ffffff;
   color-scheme: dark;
   background-color: var(--canvas);
@@ -83,6 +84,7 @@
 
   /* Fonts */
   --font-sans: var(--font-sans-family), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-display-family), var(--font-sans-family), ui-sans-serif, system-ui, sans-serif;
 
   /* Responsive spacing → px-gutter, py-section, gap-x-grid, h-header, top-header */
   --spacing-gutter: var(--gutter);
@@ -113,14 +115,16 @@
   --text-title--line-height: 1.625rem;
   --text-title--letter-spacing: -0.005em;
 
-  --text-headline: clamp(1.75rem, 1.35rem + 1.6vw, 2.75rem); /* section heads */
-  --text-headline--line-height: 1.1;
-  --text-headline--letter-spacing: -0.015em;
+  /* Headline and display set in the condensed display face, uppercase (see base). */
+  --text-headline: clamp(1.875rem, 1.4rem + 1.9vw, 3rem); /* section heads */
+  --text-headline--line-height: 1.02;
+  --text-headline--letter-spacing: 0.005em;
+  --text-headline--font-weight: 600;
 
-  --text-display: clamp(2.5rem, 1.4rem + 5vw, 6.5rem); /* campaign heroes */
-  --text-display--line-height: 0.95;
-  --text-display--letter-spacing: -0.03em;
-  --text-display--font-weight: 400;
+  --text-display: clamp(2.75rem, 1.5rem + 5.6vw, 7rem); /* campaign heroes */
+  --text-display--line-height: 0.92;
+  --text-display--letter-spacing: -0.005em;
+  --text-display--font-weight: 600;
 
   --tracking-label: 0.1em;
   --tracking-wide-label: 0.18em;
@@ -176,8 +180,15 @@
   h2,
   h3,
   h4 {
-    font-weight: 400;
+    font-weight: 500;
     text-wrap: balance;
+  }
+
+  /* Signage headlines: the text-* bundles can't carry a family or case. */
+  .text-headline,
+  .text-display {
+    font-family: var(--font-display);
+    text-transform: uppercase;
   }
 
   p {

@@ -1,9 +1,11 @@
 // Loads the sample catalog. Idempotent: rows are upserted by slug, so running
-// it again resets the sample products and stock to their seed values.
+// it again resets the sample products and stock to their seed values. Products
+// and categories missing from the seed are pruned; their stock, bag and
+// wishlist rows cascade, and past order lines keep their snapshot.
 //   npm run db:seed
 
 import { config } from "dotenv";
-import { sql } from "drizzle-orm";
+import { notInArray, sql } from "drizzle-orm";
 import { categories, products, stock } from "./schema";
 import { seedCategories, seedProducts } from "./seed-data";
 
@@ -77,7 +79,22 @@ async function main() {
       set: { quantity: excluded("quantity"), updatedAt: sql`now()` },
     });
 
+  // Products first: categories are `onDelete: restrict`.
+  const [prunedProducts, prunedCategories] = await db.batch([
+    db
+      .delete(products)
+      .where(notInArray(products.slug, seedProducts.map((p) => p.slug)))
+      .returning({ slug: products.slug }),
+    db
+      .delete(categories)
+      .where(notInArray(categories.slug, seedCategories.map((c) => c.slug)))
+      .returning({ slug: categories.slug }),
+  ]);
+
   console.log(`Seeded ${categoryRows.length} categories, ${productRows.length} products and their stock.`);
+  if (prunedProducts.length || prunedCategories.length) {
+    console.log(`Pruned ${prunedProducts.length} products and ${prunedCategories.length} categories not in the seed.`);
+  }
 }
 
 main().catch((error) => {
